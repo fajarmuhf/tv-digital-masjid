@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Jadwal Sholat Mesjid</title>
+	<script src="jquery-3.2.1.min.js"></script>
+	<style type="text/css">
+		body, html {
+		  height: 100%;
+		  margin: 0;
+		}
+
+		.bg {
+		  /* The image used */
+		  background-image: url("kabah.jpg");
+
+		  /* Full height */
+		  height: 100%; 
+
+		  /* Center and scale the image nicely */
+		  background-position: 0px -60px;
+		  background-repeat: no-repeat;
+		  background-size: cover;
+		}
+		.judul{
+			position: fixed;
+    		top: 0;
+    		width: 100%;
+	    	background: navy;
+	    	color: white;	
+	    	font-size: 80px;
+	    	text-align: center;
+		}
+	    .footer{
+	    	position: fixed;
+    		bottom: 0;
+    		width: 100%;
+	    	background: navy;
+	    	color: white;
+	    	overflow: hidden;
+	    }
+	    section.container {
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: center;
+		}
+		.marquee {
+		    position: relative;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 60px;
+		    display: block;
+		    transform-origin: 50% 100%;
+		    transition: transform 0.25s;
+		}
+
+		.marquee .inner {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    display: flex;
+		    align-items: flex-end;
+		    color: white;
+	    	font-size: 60px;
+		    white-space: nowrap;
+		}
+
+		.marquee .inner > * {
+		    padding: 0 1rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="bg">
+	<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div>
+	<div class="footer">
+		<section class="container">
+            <div class="marquee" data-speed="-1">
+                <div class="inner">
+                    <div id="imsak"></div>
+                    <div id="subuh"></div>
+                    <div id="sunrise"></div>
+                    <div id="dzuhur"></div>
+                    <div id="ashar"></div>
+                    <div id="magrib"></div>
+                    <div id="isha"></div>
+                    <div id="referensi"></div>
+                </div>
+            </div>
+        </section>
+	</div>
+	</div>
+	<script type="text/javascript">
+		const marquees = document.querySelectorAll("div.marquee");
+
+		marquees.forEach(function(element) {
+		    let tick = 1;
+		    let value = element.dataset.speed;
+		    element.innerHTML += element.innerHTML;
+		    element.innerHTML += element.innerHTML;
+
+		    const innerTags = element.querySelectorAll("div.inner");
+		    innerTags.forEach((inner, index) => {
+		        inner.style.left = inner.offsetWidth * index + "px";
+		    });
+
+		    const ticker = function() {
+		        tick += parseInt(value);
+		        //element.innerHTML = tick;
+		        //element.style.left = tick + "px";
+		        innerTags.forEach((inner, index) => {
+		            let width = inner.offsetWidth-$(window).width()/2;
+		            let normalizedMarqueeX = ((tick % width) + width) % width;
+		            let pos = width * (index - 1) + normalizedMarqueeX;
+
+		            inner.style.left = pos + "px";
+		        });
+		        requestAnimationFrame(ticker);
+		    };
+		    ticker();
+		});
+
+		function formatDate(date) {
+		    var d = new Date(date),
+		        month = '' + (d.getMonth() + 1),
+		        day = '' + d.getDate(),
+		        year = d.getFullYear();
+
+		    if (month.length < 2) 
+		        month = '0' + month;
+		    if (day.length < 2) 
+		        day = '0' + day;
+
+		    return [year, month, day].join('-');
+		}
+
+		const d = new Date();
+		var url = "jadwal/"+d.getFullYear()+"-"+(d.getMonth()+1)+".json";
+		$.getJSON(url,
+		function(data) {
+		  for(var i=0;i<data.results.datetime.length;i++){
+		  	if(formatDate(new Date()) == data.results.datetime[i].date.gregorian){
+		  		console.log(data.results.datetime[i]);	
+		  		document.getElementById("imsak").innerText="Imsak "+data.results.datetime[i].times.Imsak;
+		  		document.getElementById("subuh").innerText="Subuh "+data.results.datetime[i].times.Fajr;
+		  		document.getElementById("sunrise").innerText="Sunrise "+data.results.datetime[i].times.Sunrise;
+		  		document.getElementById("dzuhur").innerText="Dzuhur "+data.results.datetime[i].times.Dhuhr;
+		  		document.getElementById("ashar").innerText="Ashar "+data.results.datetime[i].times.Asr;
+		  		document.getElementById("magrib").innerText="Magrib "+data.results.datetime[i].times.Maghrib;
+		  		document.getElementById("isha").innerText="Isha "+data.results.datetime[i].times.Isha;
+		  		document.getElementById("referensi").innerText = "https://prayertimes.date";
+		  	}
+		  }
+		});
+	</script>
+</body>
+</html>
