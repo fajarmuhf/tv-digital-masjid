@@ -43,7 +43,7 @@
 	    	background: navy;
 	    	color: white;	
 			position: fixed;
-			width: 30%;
+			width: 27%;
     		right: 30px;
     		border-radius: 15px;
 		}
@@ -51,7 +51,8 @@
 	    	background: navy;
 	    	color: white;	
 			position: fixed;
-			width: 30%;
+			width: 25%;
+    		margin-left: 30px;
     		left: 0px;
     		border-radius: 15px;
 		}
@@ -139,7 +140,7 @@
 </head>
 <body>
 	<div class="bg">
-	<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div>
+	<!--<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div> -->
 	<div class="midcontainer"> 
 		<div class="jam" id="jam"></div>
 		<div class="counter" id="counter"></div>
@@ -1302,25 +1303,25 @@
 			tanggalSekarang=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+(d.getDate());
 			$.getJSON(url,
 			function(data) {
-			  for(var i=0;i<data.results.datetime.length;i++){
-			  	if(formatDate(new Date()) == data.results.datetime[i].date.gregorian){
-			  		//console.log(data.results.datetime[i]);	
-			  		Imsak=data.results.datetime[i].times.Imsak;
-			  		Fajr=data.results.datetime[i].times.Fajr;
-			  		Syuruk=data.results.datetime[i].times.Sunrise;
-			  		Dzuhur=data.results.datetime[i].times.Dhuhr;
-			  		Ashar=data.results.datetime[i].times.Asr;
-			  		Maghrib=data.results.datetime[i].times.Maghrib;
-			  		Isha=data.results.datetime[i].times.Isha;
+			  for(var i=0;i<data.data.length;i++){	
+			  	if(("00"+d.getDate()).slice(-2)+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+(d.getFullYear()) == data.data[i].date.gregorian.date){
+			  		console.log(data.data[i]);
+			  		Imsak=data.data[i].timings.Imsak.split(" (WIB)")[0];
+			  		Fajr=data.data[i].timings.Fajr.split(" (WIB)")[0];
+			  		Syuruk=data.data[i].timings.Sunrise.split(" (WIB)")[0];
+			  		Dzuhur=data.data[i].timings.Dhuhr.split(" (WIB)")[0];
+			  		Ashar=data.data[i].timings.Asr.split(" (WIB)")[0];
+			  		Maghrib=data.data[i].timings.Maghrib.split(" (WIB)")[0];
+			  		Isha=data.data[i].timings.Isha.split(" (WIB)")[0];
 			  		
-			  		document.getElementById("imsak").innerText="Imsak "+data.results.datetime[i].times.Imsak;
-			  		document.getElementById("subuh").innerText="Subuh "+data.results.datetime[i].times.Fajr;
-			  		document.getElementById("sunrise").innerText="Syuruq "+data.results.datetime[i].times.Sunrise;
-			  		document.getElementById("dzuhur").innerText="Dzuhur "+data.results.datetime[i].times.Dhuhr;
-			  		document.getElementById("ashar").innerText="Ashar "+data.results.datetime[i].times.Asr;
-			  		document.getElementById("magrib").innerText="Magrib "+data.results.datetime[i].times.Maghrib;
-			  		document.getElementById("isha").innerText="Isha "+data.results.datetime[i].times.Isha;
-			  		document.getElementById("referensi").innerText = "https://prayertimes.date";
+			  		document.getElementById("imsak").innerHTML="<div style='font-size:70px;'>Imsak</div><div>"+Imsak+"</div>";
+			  		document.getElementById("subuh").innerHTML="<div style='font-size:70px;'>Subuh</div><div>"+Fajr+"</div>";
+			  		document.getElementById("sunrise").innerHTML="<div style='font-size:70px;'>Syuruq</div><div>"+Syuruk+"</div>";
+			  		document.getElementById("dzuhur").innerHTML="<div style='font-size:70px;'>Dzuhur</div><div>"+Dzuhur+"</div>";
+			  		document.getElementById("ashar").innerHTML="<div style='font-size:70px;'>Ashar</div><div>"+Ashar+"</div>";
+			  		document.getElementById("magrib").innerHTML="<div style='font-size:70px;'>Magrib</div><div>"+Maghrib+"</div>";
+			  		document.getElementById("isha").innerHTML="<div style='font-size:70px;'>Isha</div><div>"+Isha+"</div>";
+			  		document.getElementById("referensi").innerHTML = "https://aladhan.com - Jadwal Sholat Masjid Al Ikhlas";
 
 			  		statusUpdate = true;
 			  	}
