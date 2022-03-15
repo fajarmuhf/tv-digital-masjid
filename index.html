@@ -61,6 +61,18 @@
 	    	color: white;
 	    	overflow: hidden;
 	    }
+	    .middleStart{
+	    	position: fixed;
+    		bottom: 50%;
+    		left: 35%;
+    		width: 30%;
+    		margin: auto;
+    		text-align: center;
+	    	background: navy;
+	    	color: white;
+	    	overflow: hidden;
+	    	font-size: 40px;
+	    }
 	    .jadwalsholat{
 	    	padding-left: 40px;
 	    	padding-right: 20px;
@@ -139,7 +151,18 @@
         </section>
 	</div>
 	</div>
+	<audio id="myAudio">
+  		<source src="alarm.wav" type="audio/wav">
+  	</audio>
+  	<button class="middleStart" onclick="startProgram()" type="button">Start Program</button>
 	<script type="text/javascript">
+		var tanggalSekarang;
+		var statusUpdate = false;
+		var Imsak,Fajr,Syuruk,Dzuhur,Ashar,Maghrib,Isha;
+		var statusAdzan = "belum";
+		var iqomahWaktu = 10;
+		var sholatWaktu = 8;
+		var waktuSekarang;
 		const marquees = document.querySelectorAll("div.marquee");
 
 		marquees.forEach(function(element) {
@@ -192,33 +215,905 @@
 			  ("00" + date.getHours()).slice(-2) + ":" +
 			  ("00" + date.getMinutes()).slice(-2) + ":" +
 			  ("00" + date.getSeconds()).slice(-2)+"</div>";
-			
+			var jamSekarang = ("00" + date.getHours()).slice(-2) + ":" +
+			  ("00" + date.getMinutes()).slice(-2);
+			  if(tanggalSekarang != date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()){
+			  	updateJadwalSholat();
+			  }
+			if(statusUpdate){
+				var ImsakJam = Imsak.split(":")[0];
+				var ImsakMenit = Imsak.split(":")[1];
+				
+				var FajrJam = Fajr.split(":")[0];
+				var FajrMenit = Fajr.split(":")[1];
+
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "imsak"){
+							waktuSekarang = "imsak";
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "imsak"){
+							waktuSekarang = "imsak";
+							document.getElementById("counterjam").innerHTML="";
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
+						if(waktuSekarang != "imsak"){
+							waktuSekarang = "imsak";
+							document.getElementById("counterjam").innerHTML="";
+						}
+					}
+				}
+
+				var ImsakJam = Fajr.split(":")[0];
+				var ImsakMenit = Fajr.split(":")[1];
+				
+				var FajrJam = Syuruk.split(":")[0];
+				var FajrMenit = Syuruk.split(":")[1];
+
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "fajr"){
+							waktuSekarang = "fajr";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "fajr"){
+							waktuSekarang = "fajr";
+							document.getElementById("counterjam").innerHTML="";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
+						if(waktuSekarang != "fajr"){
+							waktuSekarang = "fajr";
+							document.getElementById("counterjam").innerHTML="";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+				}
+
+
+				var ImsakJam = Syuruk.split(":")[0];
+				var ImsakMenit = Syuruk.split(":")[1];
+				
+				var FajrJam = Dzuhur.split(":")[0];
+				var FajrMenit = Dzuhur.split(":")[1];
+
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "syuruk"){
+							waktuSekarang = "syuruk";
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "syuruk"){
+							waktuSekarang = "syuruk";
+							document.getElementById("counterjam").innerHTML="";
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
+						if(waktuSekarang != "syuruk"){
+							waktuSekarang = "syuruk";
+							document.getElementById("counterjam").innerHTML="";
+						}
+					}
+				}
+
+
+				var ImsakJam = Dzuhur.split(":")[0];
+				var ImsakMenit = Dzuhur.split(":")[1];
+				
+				var FajrJam = Ashar.split(":")[0];
+				var FajrMenit = Ashar.split(":")[1];
+
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "dzuhur"){
+							waktuSekarang = "dzuhur";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "dzuhur"){
+							waktuSekarang = "dzuhur";
+							document.getElementById("counterjam").innerHTML="";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
+
+						if(waktuSekarang != "dzuhur"){
+							waktuSekarang = "dzuhur";
+							document.getElementById("counterjam").innerHTML="";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+				}
+
+
+				var ImsakJam = Ashar.split(":")[0];
+				var ImsakMenit = Ashar.split(":")[1];
+				
+				var FajrJam = Maghrib.split(":")[0];
+				var FajrMenit = Maghrib.split(":")[1];
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "ashar"){
+							waktuSekarang = "ashar";
+						}
+
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "ashar"){
+							waktuSekarang = "ashar";
+							document.getElementById("counterjam").innerHTML="";
+						}	
+
+
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
+						if(waktuSekarang != "ashar"){
+							waktuSekarang = "ashar";
+							document.getElementById("counterjam").innerHTML="";
+						}
+
+
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+				}
+
+				var ImsakJam = Maghrib.split(":")[0];
+				var ImsakMenit = Maghrib.split(":")[1];
+				
+				var FajrJam = Isha.split(":")[0];
+				var FajrMenit = Isha.split(":")[1];
+
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "magrib"){
+							waktuSekarang = "magrib";
+						}
+
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "magrib"){
+							waktuSekarang = "magrib";
+							document.getElementById("counterjam").innerHTML="";
+						}
+
+
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
+						if(waktuSekarang != "magrib"){
+							waktuSekarang = "magrib";
+							document.getElementById("counterjam").innerHTML="";
+						}
+
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+				}
+
+
+				var ImsakJam = Isha.split(":")[0];
+				var ImsakMenit = Isha.split(":")[1];
+				
+				var FajrJam = Imsak.split(":")[0];
+				var FajrMenit = Imsak.split(":")[1];
+
+				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
+					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+						if(waktuSekarang != "isha"){
+							waktuSekarang = "isha";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
+						if(waktuSekarang != "isha"){
+							waktuSekarang = "isha";
+							document.getElementById("counterjam").innerHTML="";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam)
+					{
+						if(waktuSekarang != "isha"){
+							waktuSekarang = "isha";
+							document.getElementById("counterjam").innerHTML="";
+						}
+						if(statusAdzan=="belum"){
+							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+								playAudio();
+								statusAdzan = "sudah adzan";
+							}
+						}
+						if(statusAdzan == "sudah adzan"){
+							var IqomahMenit = (ImsakMenit+10);
+							var IqomahJam = ImsakJam;
+
+							var IqomahMenitSebelum = (ImsakMenit+9)%60;
+							var IqomahJamSebelum = (ImsakJam)%24;
+							
+							if(ImsakMenit+iqomahWaktu > 59){
+								var IqomahMenit = (ImsakMenit+iqomahWaktu)%60;
+								var IqomahJam = (ImsakJam+1)%24;
+							}
+							if(IqomahMenitSebelum+iqomahWaktu-1 > 59){
+								var IqomahMenitSebelum = (ImsakMenit+iqomahWaktu-1)%60;
+								var IqomahJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) >= IqomahMenitSebelum && ("00" + date.getMinutes()).slice(-2) < IqomahMenit && ("00" + date.getHours()).slice(-2) >= IqomahJamSebelum && ("00" + date.getHours()).slice(-2) < IqomahJam){
+								document.getElementById("counterjam").innerHTML=(IqomahMenit-("00" + date.getMinutes()).slice(-2))+":"+(IqomahJam-("00" + date.getHours()).slice(-2));
+							}
+							if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+								playAudio();
+								statusAdzan = "sudah iqomah";
+							}
+						}
+						if(statusAdzan == "sudah iqomah"){
+							var SholatMenitSebelum = (ImsakMenit+iqomahWaktu)%60;
+							var SholatJamSebelum = (ImsakJam)%24;
+
+							if(ImsakMenit+iqomahWaktu+sholatWaktu > 59){
+								var SholatMenitSebelum = (ImsakMenit+iqomahWaktu+sholatWaktu)%60;
+								var SholatJamSebelum = (ImsakJam+1)%24;
+							}
+
+							if(("00" + date.getMinutes()).slice(-2) == SholatMenitSebelum && ("00" + date.getHours()).slice(-2) == SholatJamSebelum){
+								statusAdzan = "belum";
+							}
+						}
+					}
+				}
+			}
+
+
+			  
 			document.getElementById("jam").innerHTML = dateStr;
 		}
 		
-		jalanJam() ;
-		document.getElementById("counter").innerHTML = "<div class='topcontent'>Iqomah</div><div class='bottomcontent'>Jam</div>";
+		document.getElementById("counter").innerHTML = "<div class='topcontent'>Iqomah</div><div class='bottomcontent' id='counterjam'>Jam</div>";
 
-		myVar = setInterval(jalanJam, 1000);
-		
-		const d = new Date();
-		var url = "jadwal/"+d.getFullYear()+"-"+(d.getMonth()+1)+".json";
-		$.getJSON(url,
-		function(data) {
-		  for(var i=0;i<data.results.datetime.length;i++){
-		  	if(formatDate(new Date()) == data.results.datetime[i].date.gregorian){
-		  		//console.log(data.results.datetime[i]);	
-		  		document.getElementById("imsak").innerText="Imsak "+data.results.datetime[i].times.Imsak;
-		  		document.getElementById("subuh").innerText="Subuh "+data.results.datetime[i].times.Fajr;
-		  		document.getElementById("sunrise").innerText="Syuruq "+data.results.datetime[i].times.Sunrise;
-		  		document.getElementById("dzuhur").innerText="Dzuhur "+data.results.datetime[i].times.Dhuhr;
-		  		document.getElementById("ashar").innerText="Ashar "+data.results.datetime[i].times.Asr;
-		  		document.getElementById("magrib").innerText="Magrib "+data.results.datetime[i].times.Maghrib;
-		  		document.getElementById("isha").innerText="Isha "+data.results.datetime[i].times.Isha;
-		  		document.getElementById("referensi").innerText = "https://prayertimes.date";
-		  	}
-		  }
-		});
+
+		function playAudio() {
+			document.getElementById("myAudio").play();
+		}
+
+		function startProgram(){
+			playAudio();
+			jalanJam() ;
+			myVar = setInterval(jalanJam, 1000);
+			document.getElementsByTagName("button")[0].style.visibility = "hidden";
+		}
+
+		function updateJadwalSholat(){
+			const d = new Date();
+			var url = "jadwal/"+d.getFullYear()+"-"+(d.getMonth()+1)+".json";
+			tanggalSekarang=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+(d.getDate());
+			$.getJSON(url,
+			function(data) {
+			  for(var i=0;i<data.results.datetime.length;i++){
+			  	if(formatDate(new Date()) == data.results.datetime[i].date.gregorian){
+			  		//console.log(data.results.datetime[i]);	
+			  		Imsak=data.results.datetime[i].times.Imsak;
+			  		Fajr=data.results.datetime[i].times.Fajr;
+			  		Syuruk=data.results.datetime[i].times.Sunrise;
+			  		Dzuhur=data.results.datetime[i].times.Dhuhr;
+			  		Ashar=data.results.datetime[i].times.Asr;
+			  		Maghrib=data.results.datetime[i].times.Maghrib;
+			  		Isha=data.results.datetime[i].times.Isha;
+			  		
+			  		document.getElementById("imsak").innerText="Imsak "+data.results.datetime[i].times.Imsak;
+			  		document.getElementById("subuh").innerText="Subuh "+data.results.datetime[i].times.Fajr;
+			  		document.getElementById("sunrise").innerText="Syuruq "+data.results.datetime[i].times.Sunrise;
+			  		document.getElementById("dzuhur").innerText="Dzuhur "+data.results.datetime[i].times.Dhuhr;
+			  		document.getElementById("ashar").innerText="Ashar "+data.results.datetime[i].times.Asr;
+			  		document.getElementById("magrib").innerText="Magrib "+data.results.datetime[i].times.Maghrib;
+			  		document.getElementById("isha").innerText="Isha "+data.results.datetime[i].times.Isha;
+			  		document.getElementById("referensi").innerText = "https://prayertimes.date";
+
+			  		statusUpdate = true;
+			  	}
+			  }
+			});
+		}
+		//updateJadwalSholat();
 	</script>
 </body>
 </html>
