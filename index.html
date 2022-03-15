@@ -61,6 +61,20 @@
 	    	color: white;
 	    	overflow: hidden;
 	    }
+	    .jadwalsholat{
+	    	position: fixed;
+    		bottom: 90px;
+    		width: 100%;
+	    	background: navy;
+	    	color: white;
+	    	overflow: hidden;
+	    	font-size: 70px;
+	    }
+	    .subjadwal{
+	    	float: left;
+	    	width: 14.28%;
+	    	text-align: center;
+	    }
 	    section.container {
 		    display: flex;
 		    flex-direction: column;
@@ -104,18 +118,20 @@
 		<div class="jam" id="jam"></div>
 		<div class="counter" id="counter"></div>
 	</div>
+	<div class="jadwalsholat">
+        <div class="subjadwal" id="imsak"></div>
+        <div class="subjadwal" id="subuh"></div>
+        <div class="subjadwal" id="sunrise"></div>
+        <div class="subjadwal" id="dzuhur"></div>
+        <div class="subjadwal" id="ashar"></div>
+        <div class="subjadwal" id="magrib"></div>
+        <div class="subjadwal" id="isha"></div>
+	</div>
 	<div class="footer">
 		<section class="container">
             <div class="marquee" data-speed="-1">
                 <div class="inner">
-                    <div id="imsak"></div>
-                    <div id="subuh"></div>
-                    <div id="sunrise"></div>
-                    <div id="dzuhur"></div>
-                    <div id="ashar"></div>
-                    <div id="magrib"></div>
-                    <div id="isha"></div>
-                    <div id="referensi"></div>
+        			<div id="referensi"></div>
                 </div>
             </div>
         </section>
