@@ -25,12 +25,33 @@
 		}
 		.judul{
 			position: fixed;
-    		top: 10px;
+    		top: 20px;
     		width: 100%;
 	    	background: navy;
 	    	color: white;	
 	    	font-size: 80px;
 	    	text-align: center;
+		}
+		.midcontainer{
+			position: fixed;
+    		top: 120px;
+    		width: 100%;
+	    	font-size: 40px;
+	    	text-align: center;
+		}
+		.jam{
+	    	background: navy;
+	    	color: white;	
+			position: fixed;
+			width: 30%;
+    		right: 30px;
+		}
+		.counter{
+	    	background: navy;
+	    	color: white;	
+			position: fixed;
+			width: 30%;
+    		left: 0px;
 		}
 	    .footer{
 	    	position: fixed;
@@ -56,6 +77,10 @@
 		    transition: transform 0.25s;
 		}
 
+		.topcontent,.bottomcontent{
+			width: 100%;
+		}
+
 		.marquee .inner {
 		    position: absolute;
 		    top: 0;
@@ -75,6 +100,10 @@
 <body>
 	<div class="bg">
 	<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div>
+	<div class="midcontainer"> 
+		<div class="jam" id="jam"></div>
+		<div class="counter" id="counter"></div>
+	</div>
 	<div class="footer">
 		<section class="container">
             <div class="marquee" data-speed="-1">
@@ -136,16 +165,34 @@
 		    return [year, month, day].join('-');
 		}
 
+		function jalanJam() {
+			var date = new Date();
+			var dateStr = "<div class='topcontent'>"+
+			  ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+			  ("00" + date.getDate()).slice(-2) + "/" +
+			  date.getFullYear() + "</div><div class='bottomcontent'>" +
+			  ("00" + date.getHours()).slice(-2) + ":" +
+			  ("00" + date.getMinutes()).slice(-2) + ":" +
+			  ("00" + date.getSeconds()).slice(-2)+"</div>";
+			
+			document.getElementById("jam").innerHTML = dateStr;
+		}
+		
+		jalanJam() ;
+		document.getElementById("counter").innerHTML = "<div class='topcontent'>Iqomah</div><div class='bottomcontent'>Jam</div>";
+
+		myVar = setInterval(jalanJam, 1000);
+		
 		const d = new Date();
 		var url = "jadwal/"+d.getFullYear()+"-"+(d.getMonth()+1)+".json";
 		$.getJSON(url,
 		function(data) {
 		  for(var i=0;i<data.results.datetime.length;i++){
 		  	if(formatDate(new Date()) == data.results.datetime[i].date.gregorian){
-		  		console.log(data.results.datetime[i]);	
+		  		//console.log(data.results.datetime[i]);	
 		  		document.getElementById("imsak").innerText="Imsak "+data.results.datetime[i].times.Imsak;
 		  		document.getElementById("subuh").innerText="Subuh "+data.results.datetime[i].times.Fajr;
-		  		document.getElementById("sunrise").innerText="Sunrise "+data.results.datetime[i].times.Sunrise;
+		  		document.getElementById("sunrise").innerText="Syuruq "+data.results.datetime[i].times.Sunrise;
 		  		document.getElementById("dzuhur").innerText="Dzuhur "+data.results.datetime[i].times.Dhuhr;
 		  		document.getElementById("ashar").innerText="Ashar "+data.results.datetime[i].times.Asr;
 		  		document.getElementById("magrib").innerText="Magrib "+data.results.datetime[i].times.Maghrib;
