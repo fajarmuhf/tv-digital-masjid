@@ -565,7 +565,20 @@
 							}
 						}
 						else{
-
+							if(statusAdzan=="belum"){
+								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+									playAudio();
+									statusAdzan = "sudah adzan";
+								}
+								if(statusAdzan == "sudah adzan"){
+									var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+									var IqomahJam = ImsakJam;
+									
+									if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+										statusAdzan = "belum";
+									}
+								}
+							}
 						}
 					}
 					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
@@ -630,7 +643,20 @@
 							}
 						}
 						else{
-							
+							if(statusAdzan=="belum"){
+								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+									playAudio();
+									statusAdzan = "sudah adzan";
+								}
+								if(statusAdzan == "sudah adzan"){
+									var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+									var IqomahJam = ImsakJam;
+									
+									if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+										statusAdzan = "belum";
+									}
+								}
+							}
 						}
 					}
 					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
@@ -696,7 +722,20 @@
 							}
 						}
 						else{
-							
+							if(statusAdzan=="belum"){
+								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
+									playAudio();
+									statusAdzan = "sudah adzan";
+								}
+								if(statusAdzan == "sudah adzan"){
+									var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+									var IqomahJam = ImsakJam;
+									
+									if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
+										statusAdzan = "belum";
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1304,16 +1343,16 @@
 			tanggalSekarang=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+(d.getDate());
 			$.getJSON(url,
 			function(data) {
-			  for(var i=0;i<data.data.length;i++){	
-			  	if(("00"+d.getDate()).slice(-2)+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+(d.getFullYear()) == data.data[i].date.gregorian.date){
-			  		console.log(data.data[i]);
-			  		Imsak=data.data[i].timings.Imsak.split(" (WIB)")[0];
-			  		Fajr=data.data[i].timings.Fajr.split(" (WIB)")[0];
-			  		Syuruk=data.data[i].timings.Sunrise.split(" (WIB)")[0];
-			  		Dzuhur=data.data[i].timings.Dhuhr.split(" (WIB)")[0];
-			  		Ashar=data.data[i].timings.Asr.split(" (WIB)")[0];
-			  		Maghrib=data.data[i].timings.Maghrib.split(" (WIB)")[0];
-			  		Isha=data.data[i].timings.Isha.split(" (WIB)")[0];
+			  //for(var i=0;i<data.data.length;i++){	
+			  	//if(True){
+			  		console.log(data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)]);
+			  		Imsak=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].imsak;
+			  		Fajr=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].subuh;
+			  		Syuruk=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].terbit;
+			  		Dzuhur=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].dzuhur;
+			  		Ashar=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].ashar;
+			  		Maghrib=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].maghrib;
+			  		Isha=data.data[(d.getFullYear())+"-"+("00"+(d.getMonth()+1)).slice(-2)+"-"+("00"+d.getDate()).slice(-2)].isya;
 			  		
 			  		document.getElementById("imsak").innerHTML="<div style='font-size:70px;'>Imsak</div><div>"+Imsak+"</div>";
 			  		document.getElementById("subuh").innerHTML="<div style='font-size:70px;'>Subuh</div><div>"+Fajr+"</div>";
@@ -1325,8 +1364,8 @@
 			  		document.getElementById("referensi").innerHTML = "https://aladhan.com - Jadwal Sholat Masjid Al Ikhlas";
 
 			  		statusUpdate = true;
-			  	}
-			  }
+			  	//}
+			  //}
 			});
 		}
 		//updateJadwalSholat();
