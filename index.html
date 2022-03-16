@@ -159,6 +159,7 @@
 		<section class="container">
             <div class="marquee" data-speed="-1">
                 <div class="inner">
+        			<div id="hadist"></div>
         			<div id="referensi"></div>
                 </div>
             </div>
@@ -203,7 +204,7 @@
 		        //element.style.left = tick + "px";
 		        innerTags.forEach((inner, index) => {
 		            let width = inner.offsetWidth-$(window).width()/2;
-		            let normalizedMarqueeX = ((tick % width) + width) % width;
+		            let normalizedMarqueeX = ((tick % (width+$(window).width())) + (width+$(window).width())) % (width+$(window).width());
 		            let pos = width * (index - 1) + normalizedMarqueeX;
 
 		            inner.style.left = pos + "px";
@@ -212,6 +213,16 @@
 		    };
 		    ticker();
 		});
+
+		function setAllDefault(){
+			document.getElementById("imsak").style.backgroundColor = "navy";
+			document.getElementById("subuh").style.backgroundColor = "navy";
+			document.getElementById("sunrise").style.backgroundColor = "navy";
+			document.getElementById("dzuhur").style.backgroundColor = "navy";
+			document.getElementById("ashar").style.backgroundColor = "navy";
+			document.getElementById("magrib").style.backgroundColor = "navy";
+			document.getElementById("isha").style.backgroundColor = "navy";
+		}
 
 		function formatDate(date) {
 		    var d = new Date(date),
@@ -255,18 +266,24 @@
 					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 						if(waktuSekarang != "imsak"){
 							waktuSekarang = "imsak";
+							setAllDefault();
+							document.getElementById("isha").style.backgroundColor = "green";
 						}
 					}
 					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
 						if(waktuSekarang != "imsak"){
 							waktuSekarang = "imsak";
 							document.getElementById("counterjam").innerHTML="";
+							setAllDefault();
+							document.getElementById("isha").style.backgroundColor = "green";
 						}
 					}
 					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
 						if(waktuSekarang != "imsak"){
 							waktuSekarang = "imsak";
 							document.getElementById("counterjam").innerHTML="";
+							setAllDefault();
+							document.getElementById("isha").style.backgroundColor = "green";
 						}
 					}
 				}
@@ -282,6 +299,9 @@
 						if(waktuSekarang != "fajr"){
 							waktuSekarang = "fajr";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("subuh").style.backgroundColor = "green";
 						}
 						if(statusAdzan=="belum"){
 							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
@@ -342,6 +362,9 @@
 						if(waktuSekarang != "fajr"){
 							waktuSekarang = "fajr";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("subuh").style.backgroundColor = "green";
 						}
 						if(statusAdzan=="belum"){
 							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
@@ -408,6 +431,9 @@
 						if(waktuSekarang != "fajr"){
 							waktuSekarang = "fajr";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("subuh").style.backgroundColor = "green";
 						}
 						if(statusAdzan=="belum"){
 							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
@@ -478,18 +504,27 @@
 						if(waktuSekarang != "syuruk"){
 							waktuSekarang = "syuruk";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("sunrise").style.backgroundColor = "green";
 						}
 					}
 					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
 						if(waktuSekarang != "syuruk"){
 							waktuSekarang = "syuruk";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("sunrise").style.backgroundColor = "green";
 						}
 					}
 					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
 						if(waktuSekarang != "syuruk"){
 							waktuSekarang = "syuruk";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("sunrise").style.backgroundColor = "green";
 						}
 					}
 				}
@@ -503,12 +538,16 @@
 
 				if(("00" + date.getHours()).slice(-2) >= ImsakJam && ("00" + date.getHours()).slice(-2) <= FajrJam){
 					if(("00" + date.getMinutes()).slice(-2) >= ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
-						if(waktuSekarang != "dzuhur"){
-							waktuSekarang = "dzuhur";
-							document.getElementById("counterjam").innerHTML="";
-						}
 
 						if(date.getDay() != 5){
+							if(waktuSekarang != "dzuhur"){
+								waktuSekarang = "dzuhur";
+								document.getElementById("counterjam").innerHTML="";
+								getHadist();
+								setAllDefault();
+								document.getElementById("dzuhur").style.backgroundColor = "green";
+							}
+
 							if(statusAdzan=="belum"){
 								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 									playAudio();
@@ -565,6 +604,13 @@
 							}
 						}
 						else{
+							if(waktuSekarang != "jumatan"){
+								waktuSekarang = "jumatan";
+								document.getElementById("counterjam").innerHTML="";
+								getHadist();
+								setAllDefault();
+								document.getElementById("dzuhur").style.backgroundColor = "green";
+							}
 							if(statusAdzan=="belum"){
 								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 									playAudio();
@@ -573,7 +619,7 @@
 								if(statusAdzan == "sudah adzan"){
 									var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
 									var IqomahJam = ImsakJam;
-									
+
 									if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
 										statusAdzan = "belum";
 									}
@@ -582,11 +628,15 @@
 						}
 					}
 					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
-						if(waktuSekarang != "dzuhur"){
-							waktuSekarang = "dzuhur";
-							document.getElementById("counterjam").innerHTML="";
-						}
 						if(date.getDay() != 5){
+							if(waktuSekarang != "dzuhur"){
+								waktuSekarang = "dzuhur";
+								document.getElementById("counterjam").innerHTML="";
+								getHadist();
+								setAllDefault();
+								document.getElementById("dzuhur").style.backgroundColor = "green";
+							}
+
 							if(statusAdzan=="belum"){
 								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 									playAudio();
@@ -643,6 +693,13 @@
 							}
 						}
 						else{
+							if(waktuSekarang != "jumatan"){
+								waktuSekarang = "jumatan";
+								document.getElementById("counterjam").innerHTML="";
+								getHadist();
+								setAllDefault();
+								document.getElementById("dzuhur").style.backgroundColor = "green";
+							}
 							if(statusAdzan=="belum"){
 								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 									playAudio();
@@ -651,7 +708,7 @@
 								if(statusAdzan == "sudah adzan"){
 									var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
 									var IqomahJam = ImsakJam;
-									
+
 									if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
 										statusAdzan = "belum";
 									}
@@ -661,11 +718,15 @@
 					}
 					if(("00" + date.getHours()).slice(-2) > ImsakJam && ("00" + date.getHours()).slice(-2) < FajrJam){
 
-						if(waktuSekarang != "dzuhur"){
-							waktuSekarang = "dzuhur";
-							document.getElementById("counterjam").innerHTML="";
-						}
 						if(date.getDay() != 5){
+							if(waktuSekarang != "dzuhur"){
+								waktuSekarang = "dzuhur";
+								document.getElementById("counterjam").innerHTML="";
+								getHadist();
+								setAllDefault();
+								document.getElementById("dzuhur").style.backgroundColor = "green";
+							}
+
 							if(statusAdzan=="belum"){
 								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 									playAudio();
@@ -722,6 +783,13 @@
 							}
 						}
 						else{
+							if(waktuSekarang != "jumatan"){
+								waktuSekarang = "jumatan";
+								document.getElementById("counterjam").innerHTML="";
+								getHadist();
+								setAllDefault();
+								document.getElementById("dzuhur").style.backgroundColor = "green";
+							}
 							if(statusAdzan=="belum"){
 								if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
 									playAudio();
@@ -730,7 +798,7 @@
 								if(statusAdzan == "sudah adzan"){
 									var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
 									var IqomahJam = ImsakJam;
-									
+
 									if(("00" + date.getMinutes()).slice(-2) == IqomahMenit && ("00" + date.getHours()).slice(-2) == IqomahJam){
 										statusAdzan = "belum";
 									}
@@ -751,6 +819,9 @@
 						if(waktuSekarang != "ashar"){
 							waktuSekarang = "ashar";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("ashar").style.backgroundColor = "green";
 						}
 
 						if(statusAdzan=="belum"){
@@ -812,6 +883,9 @@
 						if(waktuSekarang != "ashar"){
 							waktuSekarang = "ashar";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("ashar").style.backgroundColor = "green";
 						}	
 
 
@@ -874,6 +948,9 @@
 						if(waktuSekarang != "ashar"){
 							waktuSekarang = "ashar";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("ashar").style.backgroundColor = "green";
 						}
 
 
@@ -945,6 +1022,9 @@
 						if(waktuSekarang != "magrib"){
 							waktuSekarang = "magrib";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("magrib").style.backgroundColor = "green";
 						}
 
 						if(statusAdzan=="belum"){
@@ -1006,6 +1086,9 @@
 						if(waktuSekarang != "magrib"){
 							waktuSekarang = "magrib";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("magrib").style.backgroundColor = "green";
 						}
 
 
@@ -1068,6 +1151,9 @@
 						if(waktuSekarang != "magrib"){
 							waktuSekarang = "magrib";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("magrib").style.backgroundColor = "green";
 						}
 
 						if(statusAdzan=="belum"){
@@ -1139,6 +1225,9 @@
 						if(waktuSekarang != "isha"){
 							waktuSekarang = "isha";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("isha").style.backgroundColor = "green";
 						}
 						if(statusAdzan=="belum"){
 							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
@@ -1199,6 +1288,9 @@
 						if(waktuSekarang != "isha"){
 							waktuSekarang = "isha";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("isha").style.backgroundColor = "green";
 						}
 						if(statusAdzan=="belum"){
 							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
@@ -1260,6 +1352,9 @@
 						if(waktuSekarang != "isha"){
 							waktuSekarang = "isha";
 							document.getElementById("counterjam").innerHTML="";
+							getHadist();
+							setAllDefault();
+							document.getElementById("isha").style.backgroundColor = "green";
 						}
 						if(statusAdzan=="belum"){
 							if(("00" + date.getMinutes()).slice(-2) == ImsakMenit && ("00" + date.getHours()).slice(-2) == ImsakJam){
@@ -1337,6 +1432,24 @@
 			document.getElementsByTagName("button")[0].style.visibility = "hidden";
 		}
 
+		function randomIntFromInterval(min, max) { // min and max included 
+		  return Math.floor(Math.random() * (max - min + 1) + min)
+		}
+
+		function getHadist(){
+			if(waktuSekarang!=null){
+				const d = new Date();
+				var url = "hadist/"+waktuSekarang+".json";
+				tanggalSekarang=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+(d.getDate());
+				$.getJSON(url,
+				function(data) {
+					var jumlahIndex = data.data.length;
+					var randNumber = randomIntFromInterval(0,jumlahIndex-1);
+					document.getElementById("hadist").innerHTML=data.data[randNumber];
+				});
+			}
+		}
+
 		function updateJadwalSholat(){
 			const d = new Date();
 			var url = "jadwal/"+d.getFullYear()+"-"+(d.getMonth()+1)+".json";
@@ -1361,7 +1474,7 @@
 			  		document.getElementById("ashar").innerHTML="<div style='font-size:70px;'>Ashar</div><div>"+Ashar+"</div>";
 			  		document.getElementById("magrib").innerHTML="<div style='font-size:70px;'>Magrib</div><div>"+Maghrib+"</div>";
 			  		document.getElementById("isha").innerHTML="<div style='font-size:70px;'>Isha</div><div>"+Isha+"</div>";
-			  		document.getElementById("referensi").innerHTML = "https://aladhan.com - Jadwal Sholat Masjid Al Ikhlas";
+			  		document.getElementById("referensi").innerHTML = "- https://bimasislam.kemenag.go.id - Jadwal Sholat Masjid Al Ikhlas, Nirwana Estate, Cibinong";
 
 			  		statusUpdate = true;
 			  	//}
