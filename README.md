@@ -18,4 +18,4 @@ Fitur yang telah diterapkan berupa :
 sudah pernah ditest untuk perangkat berikut : 
 
 - Mi TV Stick Android Box
-- LG 
+- Samsung 42 inch
