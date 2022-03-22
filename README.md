@@ -9,6 +9,8 @@ Fitur yang telah diterapkan berupa :
 - Tampilan Highlight pada Sholat apa pada Waktu Sekarang (Misal sekarang waktu Sholat Isya maka dihighlight warna hijau)
 - Penghitungan mundur waktu Iqomah (Counting Timer)
 - Pemberitahuan alarm untuk waktu azan & iqomah
-- Tampilan gelap ketika sedang sholat agar tidak memperhatikan tv(Diberi waktu misal 8 menit)
+- Tampilan gelap ketika sedang sholat agar tidak memperhatikan tv(Diberi waktu misal 10 menit)
 - Tampilan Hadist sesuai dengan waktu sholat sekarang
 - Pengumpulan database jadwal sholat untuk 50 tahun
+- Tampilan untuk Jam Kalender Hijriah dan Masehi
+- Tampilan gelap ketika 1jam setelah waktu isya dan tampil kembali setelah 1jam sebelum subuh
