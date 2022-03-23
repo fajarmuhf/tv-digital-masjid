@@ -188,7 +188,7 @@
 		var Imsak,Fajr,Syuruk,Dzuhur,Ashar,Maghrib,Isha;
 		var statusAdzan = "belum";
 		var iqomahWaktu = 10;
-		var iqomahWaktu = 12;
+		var iqomahSubuhWaktu = 12;
 		var sholatWaktu = 10;
 		var waktuSekarang;
 		const marquees = document.querySelectorAll("div.marquee");
@@ -344,8 +344,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			//date.setHours(date.getHours()-1);
-			//date.setMinutes(date.getMinutes()+16);
+			//date.setHours(date.getHours()+13);
+			//date.setMinutes(date.getMinutes()+57);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -424,7 +424,7 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahSubuhWaktu));
 							var IqomahJam = ImsakJam;
 
 							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahSubuhWaktu)-1);
