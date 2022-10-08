@@ -14,6 +14,7 @@ Fitur yang telah diterapkan berupa :
 - Pengumpulan database jadwal sholat untuk 50 tahun
 - Tampilan untuk Jam Kalender Hijriah dan Masehi
 - Tampilan gelap ketika 1jam setelah waktu isya dan tampil kembali setelah 1jam sebelum subuh
+- Edit Waktu Iqomah dan Waktu Sholat
 
 sudah pernah ditest untuk perangkat berikut : 
 

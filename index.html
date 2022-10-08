@@ -57,6 +57,20 @@
     		left: 0px;
     		border-radius: 15px;
 		}
+		.inputSholat{
+	    	color: white;	
+			width: 20%;
+    		margin: auto;
+			padding:auto;
+			text-align:center;
+    		border-radius: 15px;
+			visibility: hidden;
+		}
+		.totalwaktu{
+			width:60%;
+			line-height:40px;
+			font-size:85px;
+		}
 	    .footer{
 	    	position: fixed;
     		bottom: 25px;
@@ -88,6 +102,9 @@
 	    	overflow: hidden;
 	    	font-size: 85px;
 	    }
+		.jadwalsholat::-webkit-input-placeholder {
+			font-size: 85px;
+		}
 	    .subjadwal{
 	    	float: left;
 	    	width: 13.9%;
@@ -149,17 +166,20 @@
 	<div class="bg">
 	<!--<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div> -->
 	<div class="midcontainer"> 
-		<div class="jam" id="jam"></div>
+		<div class="jam" id="jam" onclick="setSholatWaktu()"></div>
 		<div class="counter" id="counter"></div>
+		<div class="inputSholat" id="inputSholat">
+			<input type="number" id="totalwaktu" class="totalwaktu" size='3' maxlength='3'>
+		</div>
 	</div>
 	<div class="jadwalsholat">
         <div class="subjadwal" id="imsak"></div>
-        <div class="subjadwal" id="subuh"></div>
+        <div class="subjadwal" id="subuh" onclick="setIqomahSubuh()"></div>
         <div class="subjadwal" id="sunrise"></div>
-        <div class="subjadwal" id="dzuhur"></div>
-        <div class="subjadwal" id="ashar"></div>
-        <div class="subjadwal" id="magrib"></div>
-        <div class="subjadwal" id="isha"></div>
+        <div class="subjadwal" id="dzuhur" onclick="setIqomahDzuhur()"></div>
+        <div class="subjadwal" id="ashar" onclick="setIqomahAshar()"></div>
+        <div class="subjadwal" id="magrib" onclick="setIqomahMagrib()"></div>
+        <div class="subjadwal" id="isha" onclick="setIqomahIsha()"></div>
 	</div>
 	<div class="footer">
 		<section class="container">
@@ -178,6 +198,15 @@
   	</audio>
   	<button class="middleStart" onclick="startProgram()" type="button">Start Program</button>
 	<script type="text/javascript">
+		
+		function activeSholatVis(){
+			inputSholatVis = !inputSholatVis;
+			if(inputSholatVis)
+			document.getElementById("inputSholat").style.visibility="visible";
+			else
+			document.getElementById("inputSholat").style.visibility="hidden";
+		}
+	
 		function toTimestamp(strDate){
 		   var datum = Date.parse(strDate);
 		   return datum/1000;
@@ -185,9 +214,11 @@
 
 		var tanggalSekarang;
 		var statusUpdate = false;
+		var inputSholatVis=false;
 		var Imsak,Fajr,Syuruk,Dzuhur,Ashar,Maghrib,Isha;
 		var statusAdzan = "belum";
-		var iqomahWaktu = 10;
+		var iqomahIshaWaktu = 10;
+		var iqomahAsharWaktu = 10;
 		var iqomahDzuhurWaktu = 12;
 		var iqomahMagribWaktu = 10;
 		var iqomahSubuhWaktu = 12;
@@ -346,8 +377,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			//date.setHours(date.getHours()+13);
-			//date.setMinutes(date.getMinutes()+57);
+			date.setHours(date.getHours()+15);
+			date.setMinutes(date.getMinutes()+39);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -362,9 +393,9 @@
 			var jamSekarang = ("00" + date.getHours()).slice(-2) + ":" +
 			  ("00" + date.getMinutes()).slice(-2);
 			  if(tanggalSekarang != date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()){
+				getWaktu();
 			  	updateJadwalSholat();
 			  }
-			  console.log(dateStr);
 			if(statusUpdate){
 				var ImsakJam = Imsak.split(":")[0];
 				var ImsakMenit = Imsak.split(":")[1];
@@ -1025,23 +1056,23 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu));
 							var IqomahJam = ImsakJam;
 
-							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1);
 							var IqomahJamKurang = ImsakJam;
 							var IqomahDetikKurang = 50;
 							
 							var IqomahMenitSebelum = (parseInt(ImsakMenit))%60;
 							var IqomahJamSebelum = parseInt(ImsakJam)%24;
 							
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu) > 59){
-								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu)))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu) > 59){
+								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahAsharWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
 							}
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 < 0){
-								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1 < 0){
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1);
 								var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 							}
 
@@ -1070,11 +1101,11 @@
 							}
 						}
 						if(statusAdzan == "sudah iqomah"){
-							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu))%60;
 							var SholatJamSebelum = parseInt(ImsakJam)%24;
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu) > 59){
-								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu) > 59){
+								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu))%60;
 								var SholatJamSebelum = (parseInt(ImsakJam)+1)%24;
 							}
 
@@ -1102,23 +1133,23 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu));
 							var IqomahJam = ImsakJam;
 
-							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1);
 							var IqomahJamKurang = ImsakJam;
 							var IqomahDetikKurang = 50;
 							
 							var IqomahMenitSebelum = (parseInt(ImsakMenit))%60;
 							var IqomahJamSebelum = parseInt(ImsakJam)%24;
 							
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu) > 59){
-								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu)))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu) > 59){
+								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahAsharWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
 							}
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 < 0){
-								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1 < 0){
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1);
 								var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 							}
 
@@ -1147,11 +1178,11 @@
 							}
 						}
 						if(statusAdzan == "sudah iqomah"){
-							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu))%60;
 							var SholatJamSebelum = parseInt(ImsakJam)%24;
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu) > 59){
-								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu) > 59){
+								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu))%60;
 								var SholatJamSebelum = (parseInt(ImsakJam)+1)%24;
 							}
 
@@ -1179,23 +1210,23 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu));
 							var IqomahJam = ImsakJam;
 
-							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1);
 							var IqomahJamKurang = ImsakJam;
 							var IqomahDetikKurang = 50;
 							
 							var IqomahMenitSebelum = (parseInt(ImsakMenit))%60;
 							var IqomahJamSebelum = parseInt(ImsakJam)%24;
 							
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu) > 59){
-								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu)))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu) > 59){
+								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahAsharWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
 							}
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 < 0){
-								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1 < 0){
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1);
 								var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 							}
 
@@ -1224,11 +1255,11 @@
 							}
 						}
 						if(statusAdzan == "sudah iqomah"){
-							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu))%60;
 							var SholatJamSebelum = parseInt(ImsakJam)%24;
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu) > 59){
-								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu) > 59){
+								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)+parseInt(sholatWaktu))%60;
 								var SholatJamSebelum = (parseInt(ImsakJam)+1)%24;
 							}
 
@@ -1507,23 +1538,23 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu));
 							var IqomahJam = ImsakJam;
 
-							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1);
 							var IqomahJamKurang = ImsakJam;
 							var IqomahDetikKurang = 50;
 							
 							var IqomahMenitSebelum = (parseInt(ImsakMenit))%60;
 							var IqomahJamSebelum = parseInt(ImsakJam)%24;
 							
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu) > 59){
-								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu)))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu) > 59){
+								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahIshaWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
 							}
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 < 0){
-								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1 < 0){
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1);
 								var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 							}
 
@@ -1553,11 +1584,11 @@
 
 						}
 						if(statusAdzan == "sudah iqomah"){
-							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu))%60;
 							var SholatJamSebelum = parseInt(ImsakJam)%24;
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu) > 59){
-								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu) > 59){
+								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu))%60;
 								var SholatJamSebelum = (parseInt(ImsakJam)+1)%24;
 							}
 
@@ -1608,23 +1639,23 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu));
 							var IqomahJam = ImsakJam;
 
-							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1);
 							var IqomahJamKurang = ImsakJam;
 							var IqomahDetikKurang = 50;
 							
 							var IqomahMenitSebelum = (parseInt(ImsakMenit))%60;
 							var IqomahJamSebelum = parseInt(ImsakJam)%24;
 							
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu) > 59){
-								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu)))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu) > 59){
+								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahIshaWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
 							}
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 < 0){
-								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1 < 0){
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1);
 								var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 							}
 
@@ -1653,11 +1684,11 @@
 							}
 						}
 						if(statusAdzan == "sudah iqomah"){
-							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu))%60;
 							var SholatJamSebelum = parseInt(ImsakJam)%24;
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu) > 59){
-								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu) > 59){
+								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu))%60;
 								var SholatJamSebelum = (parseInt(ImsakJam)+1)%24;
 							}
 
@@ -1708,23 +1739,23 @@
 							}
 						}
 						if(statusAdzan == "sudah adzan"){
-							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahWaktu));
+							var IqomahMenit = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu));
 							var IqomahJam = ImsakJam;
 
-							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1);
 							var IqomahJamKurang = ImsakJam;
 							var IqomahDetikKurang = 50;
 							
 							var IqomahMenitSebelum = (parseInt(ImsakMenit))%60;
 							var IqomahJamSebelum = parseInt(ImsakJam)%24;
 							
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu) > 59){
-								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu)))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu) > 59){
+								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahIshaWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
 							}
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 < 0){
-								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1);
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1 < 0){
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1);
 								var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 							}
 
@@ -1753,12 +1784,12 @@
 							}
 						}
 						if(statusAdzan == "sudah iqomah"){
-							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu))%60;
 							var SholatJamSebelum = parseInt(ImsakJam)%24;
 
 
-							if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu) > 59){
-								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahWaktu)+parseInt(sholatWaktu))%60;
+							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu) > 59){
+								var SholatMenitSebelum = (parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)+parseInt(sholatWaktu))%60;
 								var SholatJamSebelum = (parseInt(ImsakJam)+1)%24;
 							}
 
@@ -1826,6 +1857,98 @@
 					var randNumber = randomIntFromInterval(0,jumlahIndex-1);
 					document.getElementById("hadist").innerHTML=data.data[randNumber];
 				});
+			}
+		}
+		
+		function getWaktu(){
+			var url = "waktu.json";
+			$.getJSON(url,
+			function(data) {
+				iqomahSubuhWaktu = data.subuh;
+				iqomahDzuhurWaktu = data.dzuhur;
+				iqomahMagribWaktu = data.magrib;
+				iqomahAsharWaktu = data.ashar;
+				iqomahIshaWaktu = data.isha;
+				sholatWaktu = data.sholat;
+			})
+		}
+		
+		function setIqomahSubuh(){
+			activeSholatVis()
+			if(!inputSholatVis){
+				var rubah = document.getElementById("totalwaktu").value;
+				
+				$.get( "write.php?subuh="+rubah+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
+				  getWaktu();
+				});
+			}
+			else{
+				document.getElementById("totalwaktu").value=iqomahSubuhWaktu
+			}
+		}
+		function setIqomahDzuhur(){
+			activeSholatVis()
+			if(!inputSholatVis){
+				var rubah = document.getElementById("totalwaktu").value;
+				
+				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+rubah+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
+				  getWaktu();
+				});
+			}
+			else{
+				document.getElementById("totalwaktu").value=iqomahDzuhurWaktu
+			}
+		}
+		function setIqomahAshar(){
+			activeSholatVis()
+			if(!inputSholatVis){
+				var rubah = document.getElementById("totalwaktu").value;
+				
+				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+rubah+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
+				  getWaktu();
+				});
+			}
+			else{
+				document.getElementById("totalwaktu").value=iqomahAsharWaktu
+			}
+		}
+		function setIqomahMagrib(){
+			activeSholatVis()
+			if(!inputSholatVis){
+				var rubah = document.getElementById("totalwaktu").value;
+				
+				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+rubah+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
+				  getWaktu();
+				});
+			}
+			else{
+				document.getElementById("totalwaktu").value=iqomahMagribWaktu
+			}
+		}
+		function setIqomahIsha(){
+			activeSholatVis()
+			if(!inputSholatVis){
+				var rubah = document.getElementById("totalwaktu").value;
+				
+				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+rubah+"&sholat="+sholatWaktu, function( data ) {
+				  getWaktu();
+				});
+			}
+			else{
+				document.getElementById("totalwaktu").value=iqomahIshaWaktu
+			}
+		}
+		function setSholatWaktu(){
+			activeSholatVis()
+			if(!inputSholatVis){
+				var rubah = document.getElementById("totalwaktu").value;
+				
+				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+rubah, function( data ) {
+				  getWaktu();
+				});
+			}
+			else{
+				document.getElementById("totalwaktu").value=sholatWaktu
 			}
 		}
 
