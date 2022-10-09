@@ -377,8 +377,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			date.setHours(date.getHours()+15);
-			date.setMinutes(date.getMinutes()+39);
+			//date.setHours(date.getHours()+9);
+			//date.setMinutes(date.getMinutes()+48);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -1861,7 +1861,7 @@
 		}
 		
 		function getWaktu(){
-			var url = "waktu.json";
+			/*var url = "waktu.json";
 			$.getJSON(url,
 			function(data) {
 				iqomahSubuhWaktu = data.subuh;
@@ -1870,7 +1870,23 @@
 				iqomahAsharWaktu = data.ashar;
 				iqomahIshaWaktu = data.isha;
 				sholatWaktu = data.sholat;
-			})
+			})*/
+			if(localStorage.getItem("subuh") !== null){
+				iqomahSubuhWaktu = localStorage.getItem("subuh");
+				iqomahDzuhurWaktu = localStorage.getItem("dzuhur");
+				iqomahMagribWaktu = localStorage.getItem("magrib");
+				iqomahAsharWaktu = localStorage.getItem("ashar");
+				iqomahIshaWaktu = localStorage.getItem("isha");
+				sholatWaktu = localStorage.getItem("sholat");
+			}
+			else{
+				localStorage.subuh = iqomahSubuhWaktu;
+				localStorage.dzuhur = iqomahDzuhurWaktu;
+				localStorage.magrib = iqomahMagribWaktu;
+				localStorage.ashar = iqomahAsharWaktu;
+				localStorage.isha = iqomahIshaWaktu;
+				localStorage.sholat = sholatWaktu;
+			}
 		}
 		
 		function setIqomahSubuh(){
@@ -1878,9 +1894,13 @@
 			if(!inputSholatVis){
 				var rubah = document.getElementById("totalwaktu").value;
 				
-				$.get( "write.php?subuh="+rubah+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
-				  getWaktu();
-				});
+				localStorage.subuh = rubah;
+				localStorage.dzuhur = iqomahDzuhurWaktu;
+				localStorage.magrib = iqomahMagribWaktu;
+				localStorage.ashar = iqomahAsharWaktu;
+				localStorage.isha = iqomahIshaWaktu;
+				localStorage.sholat = sholatWaktu;
+				getWaktu();
 			}
 			else{
 				document.getElementById("totalwaktu").value=iqomahSubuhWaktu
@@ -1891,9 +1911,13 @@
 			if(!inputSholatVis){
 				var rubah = document.getElementById("totalwaktu").value;
 				
-				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+rubah+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
-				  getWaktu();
-				});
+				localStorage.subuh = iqomahSubuhWaktu;
+				localStorage.dzuhur = rubah;
+				localStorage.magrib = iqomahMagribWaktu;
+				localStorage.ashar = iqomahAsharWaktu;
+				localStorage.isha = iqomahIshaWaktu;
+				localStorage.sholat = sholatWaktu;
+				getWaktu();
 			}
 			else{
 				document.getElementById("totalwaktu").value=iqomahDzuhurWaktu
@@ -1904,9 +1928,13 @@
 			if(!inputSholatVis){
 				var rubah = document.getElementById("totalwaktu").value;
 				
-				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+rubah+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
-				  getWaktu();
-				});
+				localStorage.subuh = iqomahSubuhWaktu;
+				localStorage.dzuhur = iqomahDzuhurWaktu;
+				localStorage.magrib = iqomahMagribWaktu;
+				localStorage.ashar = rubah;
+				localStorage.isha = iqomahIshaWaktu;
+				localStorage.sholat = sholatWaktu;
+				getWaktu();
 			}
 			else{
 				document.getElementById("totalwaktu").value=iqomahAsharWaktu
@@ -1917,9 +1945,13 @@
 			if(!inputSholatVis){
 				var rubah = document.getElementById("totalwaktu").value;
 				
-				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+rubah+"&isha="+iqomahIshaWaktu+"&sholat="+sholatWaktu, function( data ) {
-				  getWaktu();
-				});
+				localStorage.subuh = iqomahSubuhWaktu;
+				localStorage.dzuhur = iqomahDzuhurWaktu;
+				localStorage.magrib = rubah;
+				localStorage.ashar = iqomahAsharWaktu;
+				localStorage.isha = iqomahIshaWaktu;
+				localStorage.sholat = sholatWaktu;
+				getWaktu();
 			}
 			else{
 				document.getElementById("totalwaktu").value=iqomahMagribWaktu
@@ -1930,9 +1962,13 @@
 			if(!inputSholatVis){
 				var rubah = document.getElementById("totalwaktu").value;
 				
-				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+rubah+"&sholat="+sholatWaktu, function( data ) {
-				  getWaktu();
-				});
+				localStorage.subuh = iqomahSubuhWaktu;
+				localStorage.dzuhur = iqomahDzuhurWaktu;
+				localStorage.magrib = iqomahMagribWaktu;
+				localStorage.ashar = iqomahAsharWaktu;
+				localStorage.isha = rubah;
+				localStorage.sholat = sholatWaktu;
+				getWaktu();
 			}
 			else{
 				document.getElementById("totalwaktu").value=iqomahIshaWaktu
@@ -1943,9 +1979,13 @@
 			if(!inputSholatVis){
 				var rubah = document.getElementById("totalwaktu").value;
 				
-				$.get( "write.php?subuh="+iqomahSubuhWaktu+"&dzuhur="+iqomahDzuhurWaktu+"&ashar="+iqomahAsharWaktu+"&magrib="+iqomahMagribWaktu+"&isha="+iqomahIshaWaktu+"&sholat="+rubah, function( data ) {
-				  getWaktu();
-				});
+				localStorage.subuh = iqomahSubuhWaktu;
+				localStorage.dzuhur = iqomahDzuhurWaktu;
+				localStorage.magrib = iqomahMagribWaktu;
+				localStorage.ashar = iqomahAsharWaktu;
+				localStorage.isha = iqomahIshaWaktu;
+				localStorage.sholat = rubah;
+				getWaktu();
 			}
 			else{
 				document.getElementById("totalwaktu").value=sholatWaktu
