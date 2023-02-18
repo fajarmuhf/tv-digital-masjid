@@ -284,7 +284,12 @@
 		function kuwaiticalendar(adjust){
 			var today = new Date();
 			if(adjust) {
-				adjustmili = 1000*60*60*24*adjust; 
+				if(today.getHours() < 18){
+					adjustmili = 1000*60*60*24*adjust;
+				} 
+				else{
+					adjustmili = 1000*60*60*24*(adjust+1);	
+				}
 				todaymili = today.getTime()+adjustmili;
 				today = new Date(todaymili);
 			}
@@ -386,7 +391,7 @@
 			  ("00" + date.getDate()).slice(-2)  + "/" +
 			  ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
 			  date.getFullYear() + "</div><div class='middlecontent'>"+
-			  writeIslamicDate()+"</div><div class='bottomcontent'>" +
+			  writeIslamicDate(-1)+"</div><div class='bottomcontent'>" +
 			  ("00" + date.getHours()).slice(-2) + ":" +
 			  ("00" + date.getMinutes()).slice(-2) + ":" +
 			  ("00" + date.getSeconds()).slice(-2)+"</div>";
@@ -2015,7 +2020,7 @@
 			  		document.getElementById("ashar").innerHTML="<div style='font-size:70px;'>Ashar</div><div>"+Ashar+"</div>";
 			  		document.getElementById("magrib").innerHTML="<div style='font-size:70px;'>Magrib</div><div>"+Maghrib+"</div>";
 			  		document.getElementById("isha").innerHTML="<div style='font-size:70px;'>Isha</div><div>"+Isha+"</div>";
-			  		document.getElementById("referensi").innerHTML = "- https://bimasislam.kemenag.go.id - Jadwal Sholat Masjid Al Ikhlas, Nirwana Estate, Cibinong";
+			  		document.getElementById("referensi").innerHTML = "- https://bimasislam.kemenag.go.id - Jadwal Sholat Masjid Al-Muhajirin, Gunung Putri, Bogor";
 
 			  		statusUpdate = true;
 			  	//}
