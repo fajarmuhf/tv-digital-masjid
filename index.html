@@ -10,6 +10,115 @@
 		  height: 100%;
 		  margin: 0;
 		}
+		* {box-sizing:border-box}
+
+		/* Slideshow container */
+		.slideshow-container {
+		  max-width: 1000px;
+		  position: relative;
+		  margin: auto;
+		  visibility: hidden;
+	      background: navy;
+	      border-radius: 15px;
+	      width: 40%;
+		}
+
+		/* Hide the images by default */
+		.mySlides {
+		  display: none;
+		}
+
+		/* Next & previous buttons */
+		.prev, .next {
+		  cursor: pointer;
+		  position: absolute;
+		  top: 50%;
+		  width: auto;
+		  margin-top: -22px;
+		  padding: 16px;
+		  color: white;
+		  font-weight: bold;
+		  font-size: 18px;
+		  transition: 0.6s ease;
+		  border-radius: 0 3px 3px 0;
+		  user-select: none;
+		}
+
+		/* Position the "next button" to the right */
+		.next {
+		  right: 0;
+		  border-radius: 3px 0 0 3px;
+		}
+
+		/* On hover, add a black background color with a little bit see-through */
+		.prev:hover, .next:hover {
+		  background-color: rgba(0,0,0,0.8);
+		}
+
+		/* Caption text */
+		.text {
+		  color: #f2f2f2;
+		  font-size: 15px;
+		  padding: 8px 12px;
+		  position: absolute;
+		  bottom: 8px;
+		  width: 100%;
+		  text-align: center;
+		}
+
+		/* Number text (1/3 etc) */
+		.numbertext {
+		  color: #f2f2f2;
+		  font-size: 12px;
+		  padding: 8px 12px;
+		  position: absolute;
+		  top: 0;
+		}
+
+		/* Number text (1/3 etc) */
+		.judul-pengumuman {
+		  color: #f2f2f2;
+		  font-size: 12px;
+		  padding: 8px 12px;
+		  margin: auto;
+	      font-size: 30%;
+		}
+
+		/* Number text (1/3 etc) */
+		.pengumuman {
+		  color: #f2f2f2;
+		  font-size: 12px;
+		  padding: 8px 12px;
+		  margin: auto;
+	      font-size: 30%;
+		}
+
+		/* The dots/bullets/indicators */
+		.dot {
+		  cursor: pointer;
+		  height: 15px;
+		  width: 15px;
+		  margin: 0 2px;
+		  background-color: #bbb;
+		  border-radius: 50%;
+		  display: inline-block;
+		  transition: background-color 0.6s ease;
+		}
+
+		.active, .dot:hover {
+		  background-color: #717171;
+		}
+
+		/* Fading animation */
+		.fade {
+		  animation-name: fade;
+		  animation-duration: 1.5s;
+		}
+
+		@keyframes fade {
+		  from {opacity: .4}
+		  to {opacity: 1}
+		}
 
 		.bg {
 		  /* The image used */
@@ -171,11 +280,15 @@
 		<div class="inputSholat" id="inputSholat">
 			<input type="number" id="totalwaktu" class="totalwaktu" size='3' maxlength='3'>
 		</div>
+		<div class="slideshow-container" id="slideshow">
+		</div>
+		<div style="text-align:center" id="dotku">
+		</div>
 	</div>
 	<div class="jadwalsholat">
-        <div class="subjadwal" id="imsak"></div>
+        <div class="subjadwal" id="imsak" onclick="reloadPage()"></div>
         <div class="subjadwal" id="subuh" onclick="setIqomahSubuh()"></div>
-        <div class="subjadwal" id="sunrise"></div>
+        <div class="subjadwal" id="sunrise" onclick="reloadPage()"></div>
         <div class="subjadwal" id="dzuhur" onclick="setIqomahDzuhur()"></div>
         <div class="subjadwal" id="ashar" onclick="setIqomahAshar()"></div>
         <div class="subjadwal" id="magrib" onclick="setIqomahMagrib()"></div>
@@ -198,7 +311,26 @@
   	</audio>
   	<button class="middleStart" onclick="startProgram()" type="button">Start Program</button>
 	<script type="text/javascript">
-		
+		let slideIndex = 0;
+
+		function showSlides() {
+		  let i;
+		  let slides = document.getElementsByClassName("mySlides");
+		  let dots = document.getElementsByClassName("dot");
+		  for (i = 0; i < slides.length; i++) {
+		    slides[i].style.display = "none";  
+		  }
+		  slideIndex++;
+		  if (slideIndex > slides.length) {slideIndex = 1}    
+		  for (i = 0; i < dots.length; i++) {
+		    dots[i].className = dots[i].className.replace(" active", "");
+		  }
+		  slides[slideIndex-1].style.display = "block";  
+		  dots[slideIndex-1].className += " active";
+		  setTimeout(showSlides, 2000); // Change image every 2 seconds
+		}
+
+
 		function activeSholatVis(){
 			inputSholatVis = !inputSholatVis;
 			if(inputSholatVis)
@@ -382,8 +514,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			//date.setHours(date.getHours()+9);
-			//date.setMinutes(date.getMinutes()+48);
+			date.setHours(date.getHours()-7);
+			date.setMinutes(date.getMinutes()-19);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -415,6 +547,7 @@
 								waktuSekarang = "imsak";
 								setAllDefault();
 								getHadist();
+								getKas();
 								document.getElementById("isha").style.backgroundColor = "green";
 							}
 						}
@@ -425,6 +558,7 @@
 							document.getElementById("counterjam").innerHTML="";
 							setAllDefault();
 							getHadist();
+							getKas();
 							document.getElementById("isha").style.backgroundColor = "green";
 						}
 					}
@@ -434,6 +568,7 @@
 							document.getElementById("counterjam").innerHTML="";
 							setAllDefault();
 							getHadist();
+							getKas();
 							document.getElementById("isha").style.backgroundColor = "green";
 						}
 					}
@@ -452,6 +587,7 @@
 								waktuSekarang = "fajr";
 								setAllDefault();
 								getHadist();
+								getKas();
 								document.getElementById("subuh").style.backgroundColor = "green";
 							}
 						}
@@ -527,6 +663,7 @@
 							waktuSekarang = "fajr";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("subuh").style.backgroundColor = "green";
 						}
@@ -608,6 +745,7 @@
 							waktuSekarang = "fajr";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("subuh").style.backgroundColor = "green";
 						}
@@ -694,6 +832,7 @@
 								waktuSekarang = "syuruk";
 								setAllDefault();
 								getHadist();
+								getKas();
 								document.getElementById("sunrise").style.backgroundColor = "green";
 							}
 						}
@@ -703,6 +842,7 @@
 							waktuSekarang = "syuruk";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("sunrise").style.backgroundColor = "green";
 						}
@@ -712,6 +852,7 @@
 							waktuSekarang = "syuruk";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("sunrise").style.backgroundColor = "green";
 						}
@@ -734,6 +875,7 @@
 									waktuSekarang = "dzuhur";
 									setAllDefault();
 									getHadist();
+									getKas();
 									document.getElementById("dzuhur").style.backgroundColor = "green";
 								}
 							}
@@ -811,6 +953,7 @@
 									waktuSekarang = "jumatan";
 									setAllDefault();
 									getHadist();
+									getKas();
 									document.getElementById("dzuhur").style.backgroundColor = "green";
 								}
 							}
@@ -837,6 +980,7 @@
 								waktuSekarang = "dzuhur";
 								document.getElementById("counterjam").innerHTML="";
 								getHadist();
+								getKas();
 								setAllDefault();
 								document.getElementById("dzuhur").style.backgroundColor = "green";
 							}
@@ -914,6 +1058,7 @@
 									waktuSekarang = "jumatan";
 									setAllDefault();
 									getHadist();
+									getKas();
 									document.getElementById("dzuhur").style.backgroundColor = "green";
 								}
 							}
@@ -940,6 +1085,7 @@
 								waktuSekarang = "dzuhur";
 								document.getElementById("counterjam").innerHTML="";
 								getHadist();
+								getKas();
 								setAllDefault();
 								document.getElementById("dzuhur").style.backgroundColor = "green";
 							}
@@ -1016,6 +1162,7 @@
 								waktuSekarang = "jumatan";
 								document.getElementById("counterjam").innerHTML="";
 								getHadist();
+								getKas();
 								setAllDefault();
 								document.getElementById("dzuhur").style.backgroundColor = "green";
 							}
@@ -1050,6 +1197,7 @@
 								waktuSekarang = "ashar";
 								setAllDefault();
 								getHadist();
+								getKas();
 								document.getElementById("ashar").style.backgroundColor = "green";
 							}
 						}
@@ -1126,6 +1274,7 @@
 							waktuSekarang = "ashar";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("ashar").style.backgroundColor = "green";
 						}	
@@ -1203,6 +1352,7 @@
 							waktuSekarang = "ashar";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("ashar").style.backgroundColor = "green";
 						}
@@ -1290,6 +1440,7 @@
 								waktuSekarang = "magrib";
 								setAllDefault();
 								getHadist();
+								getKas();
 								document.getElementById("magrib").style.backgroundColor = "green";
 							}
 						}
@@ -1366,6 +1517,7 @@
 							waktuSekarang = "magrib";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("magrib").style.backgroundColor = "green";
 						}
@@ -1443,6 +1595,7 @@
 							waktuSekarang = "magrib";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("magrib").style.backgroundColor = "green";
 						}
@@ -1533,6 +1686,7 @@
 								waktuSekarang = "isha";
 								setAllDefault();
 								getHadist();
+								getKas();
 								document.getElementById("isha").style.backgroundColor = "green";
 							}
 						}
@@ -1634,6 +1788,7 @@
 							waktuSekarang = "isha";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("isha").style.backgroundColor = "green";
 						}
@@ -1734,6 +1889,7 @@
 							waktuSekarang = "isha";
 							document.getElementById("counterjam").innerHTML="";
 							getHadist();
+							getKas();
 							setAllDefault();
 							document.getElementById("isha").style.backgroundColor = "green";
 						}
@@ -1864,6 +2020,69 @@
 				});
 			}
 		}
+
+		function getKas(){
+			if(waktuSekarang!=null){
+				document.getElementById("slideshow").style.visibility="visible";
+				const d = new Date();
+				var url = "kas/kas.json";
+				$.getJSON(url,
+				function(data) {
+					console.log(data);
+					var jumlahIndex = data.data.length;
+					var limitindex = 5;
+					if(jumlahIndex%limitindex == 0){
+						var jummaxindex = jumlahIndex/limitindex;
+					}else{
+						var jummaxindex = ((jumlahIndex-(jumlahIndex%limitindex))/limitindex)+1;	
+					}
+					jumlahPemasukan = 0;
+					for(var j=0;j<jummaxindex;j++){
+						document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Kas Masjid</div><table id='pengumuman"+j+"' class='pengumuman'></table></div>";
+						document.getElementById('dotku').innerHTML += '<span class="dot"></span>';
+						document.getElementById("pengumuman"+j).innerHTML+=
+							"<tr>"+
+								"<td>No</td>"+
+								"<td>Tanggal</td>"+
+								"<td>Uraian</td>"+
+								"<td>Jumlah</td>"+
+								"<td>Tipe</td>"+
+							"</tr>";
+						for(var i=0+j*limitindex;i<(j+1)*limitindex;i++){
+							if(data.data[i]==null){
+								break;
+							}
+						document.getElementById("pengumuman"+j).innerHTML+=
+							"<tr>"+
+								"<td>"+(i+1)+"</td>"+
+								"<td>"+data.data[i].tanggal+"</td>"+
+								"<td>"+data.data[i].uraian+"</td>"+
+								"<td>"+data.data[i].jumlah+"</td>"+
+								"<td>"+data.data[i].tipe+"</td>"+
+							"</tr>";
+							if(data.data[i].tipe="masuk"){
+								jumlahPemasukan += parseInt(data.data[i].jumlah);
+							}
+							else{
+								jumlahPemasukan -= parseInt(data.data[i].jumlah);	
+							}
+						}
+						if(j==jummaxindex-1){
+							document.getElementById("pengumuman"+j).innerHTML+=
+							"<tr>"+
+								"<td></td>"+
+								"<td></td>"+
+								"<td>Total</td>"+
+								"<td>"+jumlahPemasukan+"</td>"+
+								"<td></td>"+
+							"</tr>";
+						}
+					}
+
+					showSlides();
+				});
+			}
+		}
 		
 		function getWaktu(){
 			/*var url = "waktu.json";
@@ -1894,6 +2113,9 @@
 			}
 		}
 		
+		function reloadPage(){
+			window.location.reload();
+		}
 		function setIqomahSubuh(){
 			activeSholatVis()
 			if(!inputSholatVis){
