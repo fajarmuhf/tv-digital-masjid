@@ -70,9 +70,29 @@ input[type=submit]:hover {
 </head>
 <body>
 
-<h2>Input Kas</h2>
 
 <div class="container">
+
+  <h2>Ganti Background</h2>
+  <form action="?submit=3" method="post" enctype="multipart/form-data">
+    <div class="row">
+      <div class="col-25">
+        <label for="fname">Gambar</label>
+      </div>
+      <div class="col-75">
+        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png">
+      </div>
+    <div class="row">
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+  <?php
+    if(@$_GET["submit"]==3){
+      move_uploaded_file($_FILES["image"]["tmp_name"], __DIR__ . "/kabah.jpg");
+      echo "<h4>Success uploaded</h4>";
+    }
+  ?>
+  <h2>Kas</h2>
   <form action="?submit=1" method="post">
     <div class="row">
       <div class="col-25">
@@ -124,23 +144,26 @@ input[type=submit]:hover {
   		$data["data"][] = array('tanggal' => $tanggal, 'uraian' => $uraian, 'jumlah' => $jumlah, 'tipe' => $tipe);
   		$newJsonString = json_encode($data);
 		  file_put_contents('kas/kas.json', $newJsonString);
+      echo "<h4>Success input</h4>";
   	}
   	if(@$_GET["submit"]==2){
   		$fileOpen = file_get_contents('kas/kas.json');
   		$data = json_decode($fileOpen, TRUE);
   		array_splice($data["data"],$_GET["id"],sizeof($data["data"])-1);
   		$newJsonString = json_encode($data);
-		file_put_contents('kas/kas.json', $newJsonString);
+		  file_put_contents('kas/kas.json', $newJsonString);
+      echo "<h4>Success deleted</h4>";
   	}
   ?>
   <table class="table table-bordered">
 		<thead class="thead-dark">
-			<tr>
-				<th>No</th>
-				<th>Tanggal</th>
-				<th>Uraian</th>
-				<th>Jumlah</th>
-				<th>Tipe</th>
+			<tr class="row">
+				<th class="col-16">No</th>
+				<th class="col-16">Tanggal</th>
+				<th class="col-16">Uraian</th>
+				<th class="col-17">Jumlah</th>
+				<th class="col-16">Tipe</th>
+        <th class="col-16">Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -149,19 +172,20 @@ input[type=submit]:hover {
   				$data = json_decode($fileOpen, TRUE);
   				for($i=0;$i<sizeof($data["data"]);$i++){
 				?>
-				<tr>
-					<td><?php echo ($i+1); ?></td>
-					<td><?php echo $data["data"][$i]['tanggal']; ?></td>
-					<td><?php echo $data["data"][$i]['uraian']; ?></td>
-					<td><?php echo $data["data"][$i]['jumlah']; ?></td>
-					<td><?php echo $data["data"][$i]['tipe']; ?></td>
-					<td><button onclick='window.location="?submit=2&id=<?php echo ($i); ?>"'>delete</button></td>
+				<tr class="row">
+					<td class="col-16"><?php echo ($i+1); ?></td>
+					<td class="col-16"><?php echo $data["data"][$i]['tanggal']; ?></td>
+					<td class="col-16"><?php echo $data["data"][$i]['uraian']; ?></td>
+					<td class="col-17"><?php echo $data["data"][$i]['jumlah']; ?></td>
+					<td class="col-16"><?php echo $data["data"][$i]['tipe']; ?></td>
+					<td class="col-16"><button onclick='window.location="?submit=2&id=<?php echo ($i); ?>"'>delete</button></td>
 				</tr>
 			<?php
 				}
 			?>
 		</tbody>
 	</table>
+
 </div>
 
 </body>

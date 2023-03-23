@@ -129,7 +129,7 @@
 		  height: 100%; 
 
 		  /* Center and scale the image nicely */
-		  background-position: 0px -200px;
+		  background-position: center;
 		  background-repeat: no-repeat;
 		  background-size: cover;
 		}
@@ -328,7 +328,7 @@
 		  }
 		  slides[slideIndex-1].style.display = "block";  
 		  dots[slideIndex-1].className += " active";
-		  setTimeout(showSlides, 2000); // Change image every 2 seconds
+		  setTimeout(showSlides, 3000); // Change image every 2 seconds
 		}
 
 
@@ -2022,6 +2022,14 @@
 			}
 		}
 
+		function convertToRupiah(angka)
+		{
+			var rupiah = '';		
+			var angkarev = angka.toString().split('').reverse().join('');
+			for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+			return 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
+		}
+
 		function getKas(){
 			if(waktuSekarang!=null){
 				document.getElementById("slideshow").style.visibility="visible";
@@ -2037,7 +2045,9 @@
 					}else{
 						var jummaxindex = ((jumlahIndex-(jumlahIndex%limitindex))/limitindex)+1;	
 					}
+					jumlahPengeluaran = 0;
 					jumlahPemasukan = 0;
+					totalJumlah = 0;
 					document.getElementById('slideshow').innerHTML = "";
 					document.getElementById('dotku').innerHTML = "";
 					for(var j=0;j<jummaxindex;j++){
@@ -2060,23 +2070,40 @@
 								"<td>"+(i+1)+"</td>"+
 								"<td>"+data.data[i].tanggal+"</td>"+
 								"<td>"+data.data[i].uraian+"</td>"+
-								"<td>"+data.data[i].jumlah+"</td>"+
+								"<td>"+convertToRupiah(parseInt(data.data[i].jumlah))+"</td>"+
 								"<td>"+data.data[i].tipe+"</td>"+
 							"</tr>";
-							if(data.data[i].tipe="masuk"){
+							if(data.data[i].tipe=="masuk"){
 								jumlahPemasukan += parseInt(data.data[i].jumlah);
 							}
 							else{
-								jumlahPemasukan -= parseInt(data.data[i].jumlah);	
+								jumlahPengeluaran += parseInt(data.data[i].jumlah);	
 							}
 						}
 						if(j==jummaxindex-1){
+							totalJumlah = jumlahPemasukan-jumlahPengeluaran;
 							document.getElementById("pengumuman"+j).innerHTML+=
 							"<tr>"+
 								"<td></td>"+
 								"<td></td>"+
-								"<td>Total</td>"+
-								"<td>"+jumlahPemasukan+"</td>"+
+								"<td style='color:lime;'>Total Masuk</td>"+
+								"<td style='color:lime;'>"+convertToRupiah(jumlahPemasukan)+"</td>"+
+								"<td></td>"+
+							"</tr>";
+							document.getElementById("pengumuman"+j).innerHTML+=
+							"<tr>"+
+								"<td></td>"+
+								"<td></td>"+
+								"<td style='color:red;'>Total Keluar</td>"+
+								"<td style='color:red;'>"+convertToRupiah(jumlahPengeluaran)+"</td>"+
+								"<td></td>"+
+							"</tr>";
+							document.getElementById("pengumuman"+j).innerHTML+=
+							"<tr>"+
+								"<td></td>"+
+								"<td></td>"+
+								"<td style='color:lime;'>Total Saldo</td>"+
+								"<td style='color:lime;'>"+convertToRupiah(totalJumlah)+"</td>"+
 								"<td></td>"+
 							"</tr>";
 						}
