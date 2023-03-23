@@ -117,9 +117,13 @@ input[type=submit]:hover {
   	if($_GET["submit"]==1){
   		$fileOpen = file_get_contents('kas/kas.json');
   		$data = json_decode($fileOpen, TRUE);
-  		$data["data"][] = array('tanggal' => $_POST["tanggal"], 'uraian' => $_POST['uraian'], 'jumlah' => $_POST['jumlah'], 'tipe' => $_POST['tipe']);
+      $tanggal = $_REQUEST["tanggal"];
+      $uraian = $_REQUEST["uraian"];
+      $jumlah = $_REQUEST["jumlah"];
+      $tipe = $_REQUEST["tipe"];
+  		$data["data"][] = array('tanggal' => $tanggal, 'uraian' => $uraian, 'jumlah' => $jumlah, 'tipe' => $tipe);
   		$newJsonString = json_encode($data);
-		file_put_contents('kas/kas.json', $newJsonString);
+		  file_put_contents('kas/kas.json', $newJsonString);
   	}
   	if($_GET["submit"]==2){
   		$fileOpen = file_get_contents('kas/kas.json');
