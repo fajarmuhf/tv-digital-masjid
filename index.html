@@ -313,6 +313,7 @@
   	<button class="middleStart" onclick="startProgram()" type="button">Start Program</button>
 	<script type="text/javascript">
 		let slideIndex = 0;
+		slideShowReady = false;
 
 		function showSlides() {
 		  let i;
@@ -2109,7 +2110,10 @@
 						}
 					}
 
-					showSlides();
+					if(!slideShowReady){
+						showSlides();
+						slideShowReady = true;
+					}
 				});
 			}
 		}
