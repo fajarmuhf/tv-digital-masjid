@@ -114,7 +114,7 @@ input[type=submit]:hover {
     </div>
   </form>
   <?php
-  	if($_GET["submit"]==1){
+  	if(@$_GET["submit"]==1){
   		$fileOpen = file_get_contents('kas/kas.json');
   		$data = json_decode($fileOpen, TRUE);
       $tanggal = $_REQUEST["tanggal"];
@@ -125,7 +125,7 @@ input[type=submit]:hover {
   		$newJsonString = json_encode($data);
 		  file_put_contents('kas/kas.json', $newJsonString);
   	}
-  	if($_GET["submit"]==2){
+  	if(@$_GET["submit"]==2){
   		$fileOpen = file_get_contents('kas/kas.json');
   		$data = json_decode($fileOpen, TRUE);
   		array_splice($data["data"],$_GET["id"],sizeof($data["data"])-1);
