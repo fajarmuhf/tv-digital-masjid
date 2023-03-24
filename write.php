@@ -132,7 +132,9 @@ input[type=submit]:hover {
   </form>
   <?php
     if(@$_GET["submit"]==3){
-      move_uploaded_file($_FILES["image"]["tmp_name"], __DIR__ . "/kabah.jpg");
+      move_uploaded_file($_FILES["image"]["tmp_name"], __DIR__ . "/kabah0.jpg");
+      move_uploaded_file($_FILES["image"]["tmp_name"], __DIR__ . "/kabah1.jpg");
+      move_uploaded_file($_FILES["image"]["tmp_name"], __DIR__ . "/kabah2.jpg");
       echo "<h4>Success uploaded</h4>";
     }
   ?>

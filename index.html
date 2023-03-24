@@ -123,7 +123,7 @@
 
 		.bg {
 		  /* The image used */
-		  background-image: url("kabah.jpg");
+		  background-image: url("kabah0.jpg");
 
 		  /* Full height */
 		  height: 100%; 
@@ -1998,7 +1998,7 @@
 			jalanJam() ;
 			getKas();
 			myVar = setInterval(jalanJam, 1000);
-			myBg = setInterval(gantiBackground, 3000);
+			myBg = setInterval(gantiBackground, 5000);
 			document.getElementsByTagName("button")[0].style.visibility = "hidden";
 		}
 
@@ -2009,7 +2009,7 @@
 			if(bgversion == 3){
 				bgversion=0;
 			}
-			document.getElementById("bg").style.backgroundImage = "url('kabah.jpg?v="+bgversion+"')";
+			document.getElementById("bg").style.backgroundImage = "url('kabah"+bgversion+".jpg')";
 		}
 
 		function randomIntFromInterval(min, max) { // min and max included 
