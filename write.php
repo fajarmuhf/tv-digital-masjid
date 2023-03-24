@@ -76,6 +76,13 @@ input[type=submit]:hover {
   <form action="?submit=4" method="post" enctype="multipart/form-data">
     <div class="row">
       <h3>Status <?php 
+      if(@$_GET["submit"]==4){
+        $fileOpen = file_get_contents('kas/kas.json');
+        $data = json_decode($fileOpen, TRUE);
+        $data["status"] = !$data["status"];
+        $newJsonString = json_encode($data);
+        file_put_contents('kas/kas.json', $newJsonString);
+      }
       $fileOpen = file_get_contents('kas/kas.json');
       $data = json_decode($fileOpen, TRUE);
       if($data["status"]){
@@ -102,13 +109,8 @@ input[type=submit]:hover {
   </form>
   <?php
     if(@$_GET["submit"]==4){
-      $fileOpen = file_get_contents('kas/kas.json');
-      $data = json_decode($fileOpen, TRUE);
-      $data["status"] = !$data["status"];
-      $newJsonString = json_encode($data);
-      file_put_contents('kas/kas.json', $newJsonString);
       if($data["status"] == 1){
-        echo "<h4>Success turn on</h4>";
+          echo "<h4>Success turn on</h4>";
       }
       else{
         echo "<h4>Success turn off</h4>";
