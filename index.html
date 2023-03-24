@@ -316,6 +316,9 @@
 		slideShowReady = false;
 
 		function showSlides() {
+			if(slideIndex == 0 && slideShowReady){
+				getKas();
+			}
 		  let i;
 		  let slides = document.getElementsByClassName("mySlides");
 		  let dots = document.getElementsByClassName("dot");
@@ -2044,7 +2047,6 @@
 
 		function getKas(){
 			if(waktuSekarang!=null){
-				document.getElementById("slideshow").style.visibility="visible";
 				const d = new Date();
 				var url = "kas/kas.json";
 				$.getJSON(url,
