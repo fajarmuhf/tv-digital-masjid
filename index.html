@@ -2079,6 +2079,8 @@
 							}
 						}
 						if(j==jummaxindex-1){
+							document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Kas Masjid</div><table id='pengumuman"+j+"' class='pengumuman'></table></div>";
+							document.getElementById('dotku').innerHTML += '<span class="dot"></span>';
 							totalJumlah = jumlahPemasukan-jumlahPengeluaran;
 							document.getElementById("pengumuman"+j).innerHTML+=
 							"<tr>"+
