@@ -123,7 +123,7 @@
 
 		.bg {
 		  /* The image used */
-		  background-image: url("kabah0.jpg");
+		  background-image: url("kabah.jpg");
 
 		  /* Full height */
 		  height: 100%; 
@@ -2009,7 +2009,7 @@
 			if(bgversion == 3){
 				bgversion=0;
 			}
-			document.getElementById("bg").style.backgroundImage = "url('kabah"+bgversion+".jpg')";
+			document.getElementById("bg").style.backgroundImage = "url('kabah.jpg?" + new Date().getTime();
 		}
 
 		function randomIntFromInterval(min, max) { // min and max included 
