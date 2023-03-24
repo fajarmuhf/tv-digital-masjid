@@ -72,7 +72,49 @@ input[type=submit]:hover {
 
 
 <div class="container">
-
+  <h2>Switch Kas</h2>
+  <form action="?submit=4" method="post" enctype="multipart/form-data">
+    <div class="row">
+      <h3>Status <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["status"]){
+        echo "On";
+      }
+      else{
+        echo "Off";
+      }
+    ?>
+    </h3>
+    </div>
+    <div class="row">
+      <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["status"]){
+        echo "<input type='submit' value='Turn Off'>";
+      }
+      else{
+        echo "<input type='submit' value='Turn On'>";
+      }
+      ?>
+    </div>
+  </form>
+  <?php
+    if(@$_GET["submit"]==4){
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      $data["status"] = !$data["status"];
+      $newJsonString = json_encode($data);
+      file_put_contents('kas/kas.json', $newJsonString);
+      if($data["status"] == 1){
+        echo "<h4>Success turn on</h4>";
+      }
+      else{
+        echo "<h4>Success turn off</h4>";
+      }
+    }
+  ?>
   <h2>Ganti Background</h2>
   <form action="?submit=3" method="post" enctype="multipart/form-data">
     <div class="row">

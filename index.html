@@ -20,8 +20,8 @@
 		  visibility: hidden;
 	      background: navy;
 	      border-radius: 15px;
-	      width: 30%;
-	      right: 3%;
+	      width: 35%;
+	      right: 4%;
 		}
 
 		/* Hide the images by default */
@@ -82,7 +82,7 @@
 		  font-size: 12px;
 		  padding: 8px 12px;
 		  margin: auto;
-	      font-size: 30%;
+	      font-size: 50%;
 		}
 
 		/* Number text (1/3 etc) */
@@ -91,7 +91,7 @@
 		  font-size: 12px;
 		  padding: 8px 12px;
 		  margin: auto;
-	      font-size: 30%;
+	      font-size: 35%;
 		}
 
 		/* The dots/bullets/indicators */
@@ -283,7 +283,7 @@
 		</div>
 		<div class="slideshow-container" id="slideshow">
 		</div>
-		<div style="text-align:center" id="dotku">
+		<div style="width: 30%;right: 3%;text-align:center" id="dotku">
 		</div>
 	</div>
 	<div class="jadwalsholat">
@@ -1989,6 +1989,14 @@
 				}
 			}
 
+			$fileOpen = file_get_contents('kas/kas.json');
+		    $data = json_decode($fileOpen, TRUE);
+		    if($data["status"]){
+		    	document.getElementById("slideshow").style.visibility="visible";
+		    }  
+		    else{
+		    	document.getElementById("slideshow").style.visibility="hidden";	
+		    }
 			document.getElementById("jam").innerHTML = dateStr;
 		}
 		
