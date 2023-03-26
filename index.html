@@ -1974,7 +1974,7 @@
 			}
 
 			const d = new Date();
-			var url = "kas/kas.json";
+			var url = "kas/kas.json?" + new Date().getTime();
 			$.getJSON(url,
 			function(data) {
 			    if(data.status){
@@ -2033,7 +2033,7 @@
 		}
 
 		function getKas(){
-				var url = "kas/kas.json";
+				var url = "kas/kas.json?" + new Date().getTime();
 				$.getJSON(url,
 				function(data) {
 					var jumlahIndex = data.data.length;
