@@ -2048,6 +2048,8 @@
 					totalJumlah = 0;
 					document.getElementById('slideshow').innerHTML = "";
 					document.getElementById('dotku').innerHTML = "";
+					document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Jadwal Jum'atan</div><div id='pengumuman' class='pengumuman'>Imam : "+data.imam+"<br>Khatib : "+data.khatib+"<br>Muazin : "+data.muazin+"</div></div>";
+					document.getElementById('dotku').innerHTML += '<span class="dot"></span>';
 					for(var j=0;j<jummaxindex;j++){
 						document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Kas Masjid</div><table id='pengumuman"+j+"' class='pengumuman'></table></div>";
 						document.getElementById('dotku').innerHTML += '<span class="dot"></span>';

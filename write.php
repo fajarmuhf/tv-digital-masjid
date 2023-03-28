@@ -70,7 +70,6 @@ input[type=submit]:hover {
 </head>
 <body>
 
-
 <div class="container">
   <h2>Switch Kas</h2>
   <form action="?submit=4" method="post" enctype="multipart/form-data">
@@ -114,6 +113,68 @@ input[type=submit]:hover {
       }
       else{
         echo "<h4>Success turn off</h4>";
+      }
+    }
+  ?>
+  <h2>Jum'atan</h2>
+  <form action="?submit=5" method="post">
+    <div class="row">
+      <h3>Imam <?php 
+      if(@$_GET["submit"]==5){
+        $fileOpen = file_get_contents('kas/kas.json');
+        $data = json_decode($fileOpen, TRUE);
+        $data["imam"] = $_POST['imam'];
+        $data["khatib"] = $_POST['khatib'];
+        $data["muazin"] = $_POST['muazin'];
+        $newJsonString = json_encode($data);
+        file_put_contents('kas/kas.json', $newJsonString);
+      }
+    ?>
+    </h3>
+    </div>
+    <div class="row">
+      <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["imam"]){
+        echo "<input type='text' name='imam' value='".$data["imam"]."'>";
+      }
+      ?>
+    </div>
+    <div class="row">
+    <h3>Khatib 
+    </h3>
+    </div>
+    <div class="row">
+      <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["khatib"]){
+        echo "<input type='text' name='khatib' value='".$data["khatib"]."'>";
+      }
+      ?>
+    </div>
+    <div class="row">
+    <h3>Muazin 
+    </h3>
+    </div>
+    <div class="row">
+      <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["muazin"]){
+        echo "<input type='text' name='muazin' value='".$data["muazin"]."'>";
+      }
+      ?>
+    </div>
+    <div class="row">
+      <input type="submit" name="Submit">
+    </div>
+  </form>
+  <?php
+    if(@$_GET["submit"]==5){
+      if(isset($data["imam"])){
+          echo "<h4>Success update data Jum'atan</h4>";
       }
     }
   ?>
