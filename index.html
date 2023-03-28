@@ -2048,7 +2048,33 @@
 					totalJumlah = 0;
 					document.getElementById('slideshow').innerHTML = "";
 					document.getElementById('dotku').innerHTML = "";
-					document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Jadwal Jum'atan</div><div id='pengumuman' class='pengumuman'>Imam : "+data.imam+"<br>Khatib : "+data.khatib+"<br>Muazin : "+data.muazin+"</div></div>";
+					document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Jadwal Jum'atan</div><table id='pengumuman"+(j-1)+"' class='pengumuman'></table></div>";
+					document.getElementById("pengumuman"+(j-1)).innerHTML+=
+							"<tr>"+
+								"<td></td>"+
+								"<td style='color:white;'>Imam</td>"+
+								"<td>:</td>"+
+								"<td style='color:white;'>"+data.imam+"</td>"+
+								"<td></td>"+
+							"</tr>";
+
+					document.getElementById("pengumuman"+(j-1)).innerHTML+=
+							"<tr>"+
+								"<td></td>"+
+								"<td style='color:white;'>Khatib</td>"+
+								"<td>:</td>"+
+								"<td style='color:white;'>"+data.khatib+"</td>"+
+								"<td></td>"+
+							"</tr>";
+
+					document.getElementById("pengumuman"+(j-1)).innerHTML+=
+							"<tr>"+
+								"<td></td>"+
+								"<td style='color:white;'>Muazin</td>"+
+								"<td>:</td>"+
+								"<td style='color:white;'>"+data.muazin+"</td>"+
+								"<td></td>"+
+							"</tr>";
 					document.getElementById('dotku').innerHTML += '<span class="dot"></span>';
 					for(var j=0;j<jummaxindex;j++){
 						document.getElementById('slideshow').innerHTML += "<div class='mySlides fade'><div class='judul-pengumuman'>Kas Masjid</div><table id='pengumuman"+j+"' class='pengumuman'></table></div>";
