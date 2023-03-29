@@ -20,6 +20,23 @@ label {
   display: inline-block;
 }
 
+#dashboard{
+    margin: auto;
+  margin-top:12px;
+    text-align: center;
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: auto;
+    text-align: center;
+}
+
 input[type=submit] {
   background-color: #04AA6D;
   color: white;
@@ -62,7 +79,7 @@ input[type=submit]:hover {
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
   .col-25, .col-75, input[type=submit] {
-    width: 100%;
+    width: 100%; 
     margin-top: 0;
   }
 }
@@ -71,6 +88,9 @@ input[type=submit]:hover {
 <body>
 
 <div class="container">
+  <form id='dashboard' method='GET' action='https://fajarmuhf.skom.id/'>
+        <button>Back to Dashboard</button>
+  </form>
   <h2>Switch Kas</h2>
   <form action="?submit=4" method="post" enctype="multipart/form-data">
     <div class="row">
