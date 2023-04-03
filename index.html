@@ -149,13 +149,15 @@
 	    	font-size: 80px;
 	    	text-align: center;
 		}
-		.jam{
-	    	background: navy;
-	    	color: white;	
+		.rightwidget{
 			position: fixed;
 			width: 27%;
     		margin-right: 30px;
     		right: 30px;
+		}
+		.jam{
+	    	background: navy;
+	    	color: white;	
     		border-radius: 15px;
 		}
 		.counter{
@@ -169,8 +171,9 @@
 		}
 		.inputSholat{
 	    	color: white;	
-			width: 20%;
+			width: 60%;
     		margin: auto;
+			margin-top: 10px;
 			padding:auto;
 			text-align:center;
     		border-radius: 15px;
@@ -276,11 +279,14 @@
 	<div class="bg" id="bg" onclick="gantiBackground()">
 	<!--<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div> -->
 	<div class="midcontainer"> 
-		<div class="jam" id="jam" onclick="setSholatWaktu()"></div>
-		<div class="counter" id="counter"></div>
-		<div class="inputSholat" id="inputSholat">
-			<input type="number" id="totalwaktu" class="totalwaktu" size='3' maxlength='3'>
+		<div class="rightwidget">
+			<div class="jam" id="jam" onclick="setSholatWaktu()">
+			</div>
+			<div class="inputSholat" id="inputSholat">
+				<input type="number" id="totalwaktu" class="totalwaktu" size='3' maxlength='3'>
+			</div>
 		</div>
+		<div class="counter" id="counter"></div>
 		<div class="slideshow-container" id="slideshow">
 		</div>
 		<div style="visibility: hidden;width: 30%;right: 3%;text-align:center" id="dotku">
@@ -525,8 +531,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			//date.setHours(date.getHours()-7);
-			//date.setMinutes(date.getMinutes()-19);
+			date.setHours(date.getHours()-3);
+			date.setMinutes(date.getMinutes()+41);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -1752,23 +1758,42 @@
 							var JamTidur = parseInt(ImsakJam)+1%24;
 							var JamSubhHidup = parseInt(SubhJam)-1%24;
 							var MenitSubhHidup = parseInt(SubhMenit);
+
+							const d = new Date();
+							var url = "kas/kas.json?" + new Date().getTime();
+							$.getJSON(url,
+							function(data) {
+								MenitTidur = (parseInt(ImsakMenit)+(data.jamtidursetelahisya%60));
+								JamTidur = (parseInt(ImsakJam)+((data.jamtidursetelahisya-(data.jamtidursetelahisya%60))/60))%24;
+
+								MenitSubhHidup = (parseInt(SubhMenit)-(data.jamtidursebelumsubh%60));
+								JamSubhHidup = (parseInt(SubhJam)-((data.jamtidursebelumsubh-(data.jamtidursebelumsubh%60))/60))%24;
+								if(("00" + date.getMinutes()).slice(-2) >= MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur || ("00" + date.getHours()).slice(-2) > JamTidur || ("00" + date.getHours()).slice(-2) < JamSubhHidup || ("00" + date.getMinutes()).slice(-2) < MenitSubhHidup && ("00" + date.getHours()).slice(-2) == JamSubhHidup){
+									statusAdzan = "belum";
+									document.getElementById("counterjam").innerHTML="";
+									document.getElementById("hideContent").style.visibility="visible";
+								}
+							});
 							
-							if(("00" + date.getMinutes()).slice(-2) == MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur || ("00" + date.getHours()).slice(-2) > JamTidur || ("00" + date.getHours()).slice(-2) < JamSubhHidup || ("00" + date.getMinutes()).slice(-2) < MenitSubhHidup && ("00" + date.getHours()).slice(-2) == JamSubhHidup){
-								statusAdzan = "belum";
-								document.getElementById("counterjam").innerHTML="";
-								document.getElementById("hideContent").style.visibility="visible";
-							}
+							
 						}
 
 						if(statusAdzan=="belum"){
 							var MenitTidur = parseInt(SubhMenit);
 							var JamTidur = parseInt(SubhJam)-1%24;
+
+							$.getJSON(url,
+							function(data) {
+								MenitTidur = (parseInt(SubhMenit)-(data.jamtidursebelumsubh%60));
+								JamTidur = (parseInt(SubhJam)-((data.jamtidursebelumsubh-(data.jamtidursebelumsubh%60))/60))%24;
+								if(("00" + date.getMinutes()).slice(-2) >= MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur){
+									statusAdzan = "belum";
+									document.getElementById("counterjam").innerHTML="";
+									document.getElementById("hideContent").style.visibility="hidden";
+								}
+							});
 							
-							if(("00" + date.getMinutes()).slice(-2) == MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur){
-								statusAdzan = "belum";
-								document.getElementById("counterjam").innerHTML="";
-								document.getElementById("hideContent").style.visibility="hidden";
-							}
+							
 						}
 					}
 					if(("00" + date.getMinutes()).slice(-2) < FajrMenit && ("00" + date.getHours()).slice(-2) == FajrJam){
@@ -1848,26 +1873,45 @@
 
 						if(statusAdzan=="belum"){
 							var MenitTidur = parseInt(ImsakMenit);
-							var JamTidur = parseInt(ImsakJam)+2%24;
+							var JamTidur = parseInt(ImsakJam)+1%24;
 							var JamSubhHidup = parseInt(SubhJam)-1%24;
 							var MenitSubhHidup = parseInt(SubhMenit);
-							
-							if(("00" + date.getMinutes()).slice(-2) == MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur || ("00" + date.getHours()).slice(-2) > JamTidur || ("00" + date.getHours()).slice(-2) < JamSubhHidup || ("00" + date.getMinutes()).slice(-2) < MenitSubhHidup && ("00" + date.getHours()).slice(-2) == JamSubhHidup){
+
+							const d = new Date();
+							var url = "kas/kas.json?" + new Date().getTime();
+							$.getJSON(url,
+							function(data) {
+								MenitTidur = (parseInt(ImsakMenit)+(data.jamtidursetelahisya%60));
+								JamTidur = (parseInt(ImsakJam)+((data.jamtidursetelahisya-(data.jamtidursetelahisya%60))/60))%24;
+
+								MenitSubhHidup = (parseInt(SubhMenit)-(data.jamtidursebelumsubh%60));
+								JamSubhHidup = (parseInt(SubhJam)-((data.jamtidursebelumsubh-(data.jamtidursebelumsubh%60))/60))%24;
+								if(("00" + date.getMinutes()).slice(-2) >= MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur || ("00" + date.getHours()).slice(-2) > JamTidur || ("00" + date.getHours()).slice(-2) < JamSubhHidup || ("00" + date.getMinutes()).slice(-2) < MenitSubhHidup && ("00" + date.getHours()).slice(-2) == JamSubhHidup){
 								statusAdzan = "belum";
 								document.getElementById("counterjam").innerHTML="";
-								document.getElementById("hideContent").style.visibility="visible";
-							}
+									document.getElementById("hideContent").style.visibility="visible";
+								}
+							});
+							
+							
 						}
 
 						if(statusAdzan=="belum"){
 							var MenitTidur = parseInt(SubhMenit);
 							var JamTidur = parseInt(SubhJam)-1%24;
 							
-							if(("00" + date.getMinutes()).slice(-2) == MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur){
-								statusAdzan = "belum";
-								document.getElementById("counterjam").innerHTML="";
-								document.getElementById("hideContent").style.visibility="hidden";
-							}
+							$.getJSON(url,
+							function(data) {
+								MenitTidur = (parseInt(SubhMenit)-(data.jamtidursebelumsubh%60));
+								JamTidur = (parseInt(SubhJam)-((data.jamtidursebelumsubh-(data.jamtidursebelumsubh%60))/60))%24;
+
+								if(("00" + date.getMinutes()).slice(-2) >= MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur){
+									statusAdzan = "belum";
+									document.getElementById("counterjam").innerHTML="";
+									document.getElementById("hideContent").style.visibility="hidden";
+								}
+							});
+
 						}
 					}
 					if(("00" + date.getHours()).slice(-2) > ImsakJam || ("00" + date.getHours()).slice(-2) < FajrJam)
@@ -1948,26 +1992,47 @@
 						}
 						if(statusAdzan=="belum"){
 							var MenitTidur = parseInt(ImsakMenit);
-							var JamTidur = parseInt(ImsakJam)+1%24;
+							var JamTidur = parseInt(ImsakJam)+2%24;
 							var JamSubhHidup = parseInt(SubhJam)-1%24;
 							var MenitSubhHidup = parseInt(SubhMenit);
 							
-							if(("00" + date.getMinutes()).slice(-2) == MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur || ("00" + date.getHours()).slice(-2) > JamTidur || ("00" + date.getHours()).slice(-2) < JamSubhHidup || ("00" + date.getMinutes()).slice(-2) < MenitSubhHidup && ("00" + date.getHours()).slice(-2) == JamSubhHidup){
-								statusAdzan = "belum";
-								document.getElementById("counterjam").innerHTML="";
-								document.getElementById("hideContent").style.visibility="visible";
-							}
+							const d = new Date();
+							var url = "kas/kas.json?" + new Date().getTime();
+							$.getJSON(url,
+							function(data) {
+								MenitTidur = (parseInt(ImsakMenit)+(data.jamtidursetelahisya%60));
+								JamTidur = (parseInt(ImsakJam)+((data.jamtidursetelahisya-(data.jamtidursetelahisya%60))/60))%24;
+
+								MenitSubhHidup = (parseInt(SubhMenit)-(data.jamtidursebelumsubh%60));
+								JamSubhHidup = (parseInt(SubhJam)-((data.jamtidursebelumsubh-(data.jamtidursebelumsubh%60))/60))%24;
+
+
+								if(("00" + date.getMinutes()).slice(-2) >= MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur || ("00" + date.getHours()).slice(-2) > JamTidur || ("00" + date.getHours()).slice(-2) < JamSubhHidup || ("00" + date.getMinutes()).slice(-2) < MenitSubhHidup && ("00" + date.getHours()).slice(-2) == JamSubhHidup){
+									statusAdzan = "belum";
+									document.getElementById("counterjam").innerHTML="";
+									document.getElementById("hideContent").style.visibility="visible";
+								}
+
+							});
+							
 						}
 
 						if(statusAdzan=="belum"){
 							var MenitTidur = parseInt(SubhMenit);
 							var JamTidur = parseInt(SubhJam)-1%24;
+
+							$.getJSON(url,
+							function(data) {
+								MenitTidur = (parseInt(SubhMenit)-(data.jamtidursebelumsubh%60));
+								JamTidur = (parseInt(SubhJam)-((data.jamtidursebelumsubh-(data.jamtidursebelumsubh%60))/60))%24;
+
+								if(("00" + date.getMinutes()).slice(-2) >= MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur){
+									statusAdzan = "belum";
+									document.getElementById("counterjam").innerHTML="";
+									document.getElementById("hideContent").style.visibility="hidden";
+								}
+							});
 							
-							if(("00" + date.getMinutes()).slice(-2) == MenitTidur && ("00" + date.getHours()).slice(-2) == JamTidur){
-								statusAdzan = "belum";
-								document.getElementById("counterjam").innerHTML="";
-								document.getElementById("hideContent").style.visibility="hidden";
-							}
 						}
 					}
 				}

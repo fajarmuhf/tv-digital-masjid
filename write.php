@@ -136,6 +136,54 @@ input[type=submit]:hover {
       }
     }
   ?>
+  <h2>Jam Tidur</h2>
+  <form action="?submit=6" method="post">
+    <div class="row">
+      <h3>Setelah Isha <?php 
+      if(@$_GET["submit"]==6){
+        $fileOpen = file_get_contents('kas/kas.json');
+        $data = json_decode($fileOpen, TRUE);
+        $data["jamtidursetelahisya"] = $_POST['isha'];
+        $data["jamtidursebelumsubh"] = $_POST['subh'];
+        $newJsonString = json_encode($data);
+        file_put_contents('kas/kas.json', $newJsonString);
+      }
+    ?>
+    </h3>
+    </div>
+    <div class="row">
+      <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["jamtidursetelahisya"]){
+        echo "<input type='number' name='isha' value='".$data["jamtidursetelahisya"]."'>";
+      }
+      ?>
+    </div>
+    <div class="row">
+    <h3>Sebelum Subuh 
+    </h3>
+    </div>
+    <div class="row">
+      <?php 
+      $fileOpen = file_get_contents('kas/kas.json');
+      $data = json_decode($fileOpen, TRUE);
+      if($data["jamtidursebelumsubh"]){
+        echo "<input type='number' name='subh' value='".$data["jamtidursebelumsubh"]."'>";
+      }
+      ?>
+    </div>
+    <div class="row">
+      <input type="submit" name="Submit">
+    </div>
+  </form>
+  <?php
+    if(@$_GET["submit"]==6){
+      if(isset($data["jamtidursebelumsubh"])){
+          echo "<h4>Success update data Jam Tidur</h4>";
+      }
+    }
+  ?>
   <h2>Jum'atan</h2>
   <form action="?submit=5" method="post">
     <div class="row">
