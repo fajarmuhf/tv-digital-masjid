@@ -344,18 +344,24 @@
 			var url = "kas/kas.json?" + new Date().getTime();
 			$.getJSON(url,
 			function(data) {
-				console.log(parseInt(data.durasigambar));
 			    setTimeout(videomulai,parseInt(data.durasigambar)*1000);
 			});
 		}
 		function videomulai(){	
 			videoStatus = true;
-			document.getElementById("slideshow").style.visibility="hidden";	
+			var url = "kas/kas.json?" + new Date().getTime();
+			$.getJSON(url,
+			function(data) {
+				if(data.statusvideo){
+					document.getElementById("slideshow").style.visibility="hidden";	
+					var vid = document.getElementById("myVideo");
+					var source = document.getElementById("myVideoSource");
+					source.setAttribute('src',"kabah.mp4?" + new Date().getTime());
+					vid.style.visibility = "visible";
+				}
+			});
 			var vid = document.getElementById("myVideo");
-			var source = document.getElementById("myVideoSource");
-			source.setAttribute('src',"kabah.mp4?" + new Date().getTime());
-			vid.style.visibility = "visible";
-			vid.play();
+			vid.play();			
 		}
 
 		function showSlides() {
@@ -567,8 +573,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			date.setHours(date.getHours()-7);
-			date.setMinutes(date.getMinutes()+41);
+			//date.setHours(date.getHours()-7);
+			//date.setMinutes(date.getMinutes()+41);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -2080,7 +2086,12 @@
 			function(data) {
 			    if(data.status){
 			    	if(videoStatus){
-			    		document.getElementById("slideshow").style.visibility="hidden";	
+			    		if(data.statusvideo){
+			    			document.getElementById("slideshow").style.visibility="hidden";	
+			    		}
+			    		else{
+			    			document.getElementById("slideshow").style.visibility="visible";
+			    		}
 			    	}
 			    	else{
 			    		document.getElementById("slideshow").style.visibility="visible";
@@ -2088,6 +2099,20 @@
 			    }  
 			    else{
 			    	document.getElementById("slideshow").style.visibility="hidden";	
+			    }
+			    if(data.statusvideo){
+			    	if(videoStatus){	
+						var vid = document.getElementById("myVideo");
+						vid.style.visibility = "visible";
+					}
+					else{
+						var vid = document.getElementById("myVideo");
+						vid.style.visibility = "hidden";	
+					}
+			    }
+			    else{
+					var vid = document.getElementById("myVideo");
+					vid.style.visibility = "hidden";
 			    }
 			});
 			document.getElementById("jam").innerHTML = dateStr;
