@@ -408,37 +408,38 @@ input[type=submit]:hover {
       echo "<h4>Success deleted</h4>";
   	}
   ?>
-  <table class="table table-bordered">
-		<thead class="thead-dark">
-			<tr class="row">
-				<th class="col-16">No</th>
-				<th class="col-16">Tanggal</th>
-				<th class="col-16">Uraian</th>
-				<th class="col-17">Jumlah</th>
-				<th class="col-16">Tipe</th>
-        <th class="col-16">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php 			
-				$fileOpen = file_get_contents('kas/kas.json');
-  				$data = json_decode($fileOpen, TRUE);
-  				for($i=0;$i<sizeof($data["data"]);$i++){
-				?>
-				<tr class="row">
-					<td class="col-16"><?php echo ($i+1); ?></td>
-					<td class="col-16"><?php echo $data["data"][$i]['tanggal']; ?></td>
-					<td class="col-16"><?php echo $data["data"][$i]['uraian']; ?></td>
-					<td class="col-17"><?php echo $data["data"][$i]['jumlah']; ?></td>
-					<td class="col-16"><?php echo $data["data"][$i]['tipe']; ?></td>
-					<td class="col-16"><button onclick='window.location="?submit=2&id=<?php echo ($i); ?>"'>delete</button></td>
-				</tr>
-			<?php
-				}
-			?>
-		</tbody>
-	</table>
-
+  <div style="overflow-x: scroll;">
+    <table class="table table-bordered">
+  		<thead class="thead-dark">
+  			<tr class="row">
+  				<th class="col-16">No</th>
+  				<th class="col-16">Tanggal</th>
+  				<th class="col-16">Uraian</th>
+  				<th class="col-17">Jumlah</th>
+  				<th class="col-16">Tipe</th>
+          <th class="col-16">Action</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<?php 			
+  				$fileOpen = file_get_contents('kas/kas.json');
+    				$data = json_decode($fileOpen, TRUE);
+    				for($i=0;$i<sizeof($data["data"]);$i++){
+  				?>
+  				<tr class="row">
+  					<td class="col-16"><?php echo ($i+1); ?></td>
+  					<td class="col-16"><?php echo $data["data"][$i]['tanggal']; ?></td>
+  					<td class="col-16"><?php echo $data["data"][$i]['uraian']; ?></td>
+  					<td class="col-17"><?php echo $data["data"][$i]['jumlah']; ?></td>
+  					<td class="col-16"><?php echo $data["data"][$i]['tipe']; ?></td>
+  					<td class="col-16"><button onclick='window.location="?submit=2&id=<?php echo ($i); ?>"'>delete</button></td>
+  				</tr>
+  			<?php
+  				}
+  			?>
+  		</tbody>
+  	</table>
+  </div>
 </div>
 
 </body>
