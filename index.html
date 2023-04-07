@@ -273,10 +273,21 @@
 			background-color: black;
 			visibility: hidden;
 		}
+		#myVideo {
+		  position: absolute;
+		  object-fit: cover;
+		  width: 100%;
+		  max-height: 100%;
+		  right: 0;
+		  top: 0;
+		}
 	</style>
 </head>
 <body>
 	<div class="bg" id="bg" onclick="gantiBackground()">
+	<video muted id="myVideo">
+	  <source src="kabah.mp4" type="video/mp4" id="myVideoSource">
+	</video>
 	<!--<div class="judul"> Jadwal Sholat Masjid Al Ikhlas</div> -->
 	<div class="midcontainer"> 
 		<div class="rightwidget">
@@ -321,6 +332,31 @@
 		let slideIndex = 0;
 		let hitung = 0;
 		slideShowReady = false;
+		var videoStatus = false;
+		document.getElementById("myVideo").addEventListener('ended',videoselesai,false);
+		videoselesai();
+		function videoselesai() {	
+			videoStatus = false;
+			document.getElementById("bg").style.backgroundImage = "url('kabah.jpg?" + new Date().getTime();
+			var vid = document.getElementById("myVideo");
+			vid.style.visibility = "hidden";
+
+			var url = "kas/kas.json?" + new Date().getTime();
+			$.getJSON(url,
+			function(data) {
+				console.log(parseInt(data.durasigambar));
+			    setTimeout(videomulai,parseInt(data.durasigambar)*1000);
+			});
+		}
+		function videomulai(){	
+			videoStatus = true;
+			document.getElementById("slideshow").style.visibility="hidden";	
+			var vid = document.getElementById("myVideo");
+			var source = document.getElementById("myVideoSource");
+			source.setAttribute('src',"kabah.mp4?" + new Date().getTime());
+			vid.style.visibility = "visible";
+			vid.play();
+		}
 
 		function showSlides() {
 		  let i;
@@ -531,7 +567,7 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			date.setHours(date.getHours()-3);
+			date.setHours(date.getHours()-7);
 			date.setMinutes(date.getMinutes()+41);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
@@ -2043,7 +2079,12 @@
 			$.getJSON(url,
 			function(data) {
 			    if(data.status){
-			    	document.getElementById("slideshow").style.visibility="visible";
+			    	if(videoStatus){
+			    		document.getElementById("slideshow").style.visibility="hidden";	
+			    	}
+			    	else{
+			    		document.getElementById("slideshow").style.visibility="visible";
+			    	}
 			    }  
 			    else{
 			    	document.getElementById("slideshow").style.visibility="hidden";	
