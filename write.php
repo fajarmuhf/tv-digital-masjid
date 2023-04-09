@@ -88,7 +88,7 @@ input[type=submit]:hover {
 <body>
 
 <div class="container">
-  <form id='dashboard' method='GET' action='https://fajarmuhf.skom.id/'>
+  <form id='dashboard' method='GET' action='https://fajarmuhf.my.id/'>
         <button>Back to Dashboard</button>
   </form>
   <h2>Switch Kas</h2>
