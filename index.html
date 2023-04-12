@@ -341,7 +341,7 @@
 			var url = "kas/kas.json?" + new Date().getTime();
 			$.getJSON(url,
 			function(data) {
-				document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg?" + new Date().getTime();
+				document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg";
 				indexSlide++;
 				console.log(indexSlide);
 				if(indexSlide > data.jumlahpicture){
@@ -353,7 +353,7 @@
 		}
 		function videoselesai() {	
 			videoStatus = false;
-			document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg?" + new Date().getTime();
+			document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg";
 			var vid = document.getElementById("myVideo");
 			vid.style.visibility = "hidden";
 
