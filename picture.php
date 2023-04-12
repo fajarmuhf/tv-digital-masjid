@@ -174,7 +174,7 @@ input[type=submit]:hover {
       $fileOpen = file_get_contents('kas/kas.json');
       $data = json_decode($fileOpen, TRUE);
       unlink("kabah".$_GET["id"].".jpg");
-      for($i=$_GET["id"];$i<=$data["jumlahpicture"];$i++){
+      for($i=$_GET["id"]+1;$i<=$data["jumlahpicture"];$i++){
         rename("kabah".$i.".jpg","kabah".($i-1).".jpg");
       }
       $data["jumlahpicture"] = (int)$data["jumlahpicture"]-1;
