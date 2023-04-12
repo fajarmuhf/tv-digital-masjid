@@ -1,3 +1,6 @@
+<?php
+  header("ngrok-skip-browser-warning: 1");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +25,7 @@ label {
 
 #dashboard{
     margin: auto;
-  margin-top:12px;
+    margin-top:12px;
     text-align: center;
 }
 
@@ -83,6 +86,12 @@ input[type=submit]:hover {
     margin-top: 0;
   }
 }
+
+.buttonclass{
+    margin: auto;
+    margin-top:12px;
+    text-align: center;
+}
 </style>
 </head>
 <body>
@@ -90,6 +99,9 @@ input[type=submit]:hover {
 <div class="container">
   <form id='dashboard' method='GET' action='https://fajarmuhf.my.id/'>
         <button>Back to Dashboard</button>
+  </form>
+  <form class='buttonclass' method='GET' action='runningtext.php'>
+        <button>Running Text</button>
   </form>
   <h2>Switch Kas</h2>
   <form action="?submit=4" method="post" enctype="multipart/form-data">
