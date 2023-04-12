@@ -103,6 +103,9 @@ input[type=submit]:hover {
   <form class='buttonclass' method='GET' action='runningtext.php'>
         <button>Running Text</button>
   </form>
+  <form class='buttonclass' method='GET' action='picture.php'>
+        <button>Picture</button>
+  </form>
   <h2>Switch Kas</h2>
   <form action="?submit=4" method="post" enctype="multipart/form-data">
     <div class="row">
@@ -303,60 +306,7 @@ input[type=submit]:hover {
       }
     }
   ?>
-  <h2>Ganti Background</h2>
-  <form action="?submit=3" method="post" enctype="multipart/form-data">
-    <div class="row">
-      <div class="col-25">
-        <label for="fname">Gambar</label>
-      </div>
-      <div class="col-75">
-        <input type="file" name="image" id="image" accept="image/gif, image/jpeg, image/png">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="fname">Video</label>
-      </div>
-      <div class="col-75">
-        <input type="file" name="video" id="video" accept="video/mp4">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="fname">Durasi Gambar</label>
-      </div>
-      <div class="col-75">
-        <?php 
-        $fileOpen = file_get_contents('kas/kas.json');
-        $data = json_decode($fileOpen, TRUE);
-        if(@$_GET["submit"]==3){
-          $fileOpen = file_get_contents('kas/kas.json');
-          $data = json_decode($fileOpen, TRUE);
-          $data["durasigambar"] = $_POST["durasi"];
-          $newJsonString = json_encode($data);
-          file_put_contents('kas/kas.json', $newJsonString);
-          if(!(!file_exists($_FILES['image']['tmp_name']) || !is_uploaded_file($_FILES['image']['tmp_name']))){
-            move_uploaded_file($_FILES["image"]["tmp_name"], __DIR__ . "/kabah.jpg");
-          }
-          if(!(!file_exists($_FILES['video']['tmp_name']) || !is_uploaded_file($_FILES['video']['tmp_name']))){
-            move_uploaded_file($_FILES["video"]["tmp_name"], __DIR__ . "/kabah.mp4");
-          }
-        }
-        if($data["durasigambar"]){
-          echo "<input type='number' name='durasi' value='".$data["durasigambar"]."'>";
-        }
-        ?>
-      </div>
-    </div>
-    <div class="row">
-      <input type="submit" value="Submit">
-    </div>
-  </form>
-  <?php
-    if(@$_GET["submit"]==3){
-      echo "<h4>Success uploaded</h4>";
-    }
-  ?>
+
   <h2>Kas</h2>
   <form action="?submit=1" method="post">
     <div class="row">

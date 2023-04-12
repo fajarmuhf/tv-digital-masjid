@@ -331,13 +331,29 @@
 	<script type="text/javascript">
 		let slideIndex = 0;
 		let hitung = 0;
+		let indexSlide = 1;
 		slideShowReady = false;
 		var videoStatus = false;
 		document.getElementById("myVideo").addEventListener('ended',videoselesai,false);
 		videoselesai();
+		slidingBackground();
+		function slidingBackground(){
+			var url = "kas/kas.json?" + new Date().getTime();
+			$.getJSON(url,
+			function(data) {
+				document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg?" + new Date().getTime();
+				indexSlide++;
+				console.log(indexSlide);
+				if(indexSlide > data.jumlahpicture){
+					indexSlide = 1;
+				}
+				setTimeout(slidingBackground,data.intervalgambar*1000);
+			});
+
+		}
 		function videoselesai() {	
 			videoStatus = false;
-			document.getElementById("bg").style.backgroundImage = "url('kabah.jpg?" + new Date().getTime();
+			document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg?" + new Date().getTime();
 			var vid = document.getElementById("myVideo");
 			vid.style.visibility = "hidden";
 
@@ -2134,7 +2150,7 @@
 		}
 		startProgram();
 		function gantiBackground(){
-			document.getElementById("bg").style.backgroundImage = "url('kabah.jpg?" + new Date().getTime();
+			document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg?" + new Date().getTime();
 		}
 
 		function randomIntFromInterval(min, max) { // min and max included 
@@ -2430,7 +2446,7 @@
 			  		document.getElementById("ashar").innerHTML="<div style='font-size:70px;'>Ashar</div><div>"+Ashar+"</div>";
 			  		document.getElementById("magrib").innerHTML="<div style='font-size:70px;'>Magrib</div><div>"+Maghrib+"</div>";
 			  		document.getElementById("isha").innerHTML="<div style='font-size:70px;'>Isha</div><div>"+Isha+"</div>";
-			  		document.getElementById("referensi").innerHTML = "- https://bimasislam.kemenag.go.id - Jadwal Sholat Masjid Al-Ikhlas, Cibinong";
+			  		document.getElementById("referensi").innerHTML = "- https://bimasislam.kemenag.go.id - Jadwal Sholat Masjid Al-Muhajirin, Gunung Putri, Bogor";
 
 			  		statusUpdate = true;
 			  	//}
