@@ -343,7 +343,7 @@
 			function(data) {
 				document.getElementById("bg").style.backgroundImage = "url('kabah"+indexSlide+".jpg";
 				indexSlide++;
-				console.log(indexSlide);
+				//console.log(indexSlide);
 				if(indexSlide > data.jumlahpicture){
 					indexSlide = 1;
 				}
@@ -589,8 +589,8 @@
 		function jalanJam() {
 			var date = new Date();
 			//For Test Date
-			//date.setHours(date.getHours()-7);
-			//date.setMinutes(date.getMinutes()+41);
+			//date.setHours(date.getHours()-9);
+			//date.setMinutes(date.getMinutes()-31);
 			const weekday = ["Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu"];
 
 			var dateStr = "<div class='topcontent'>"+
@@ -682,6 +682,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahSubuhWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahSubuhWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahSubuhWaktu)-1 < 0){
@@ -763,6 +767,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahSubuhWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahSubuhWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahSubuhWaktu)-1 < 0){
@@ -965,12 +973,18 @@
 								if(parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu) > 59){
 									var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahDzuhurWaktu)))%60;
 									var IqomahJam = ((parseInt(ImsakJam))+1);
+									
+									var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+									var IqomahJamKurang = parseInt(ImsakJam)+1;
+									var IqomahDetikKurang = 50;
 								}
 
 								if(parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1 < 0){
 									var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1);
 									var IqomahJamKurang = ((parseInt(ImsakJam))-1);
 								}
+								console.log(IqomahMenitKurang+":"+IqomahJamKurang);
+								console.log(IqomahMenit+":"+IqomahJam);
 
 								/*if(parseInt(ImsakMenit)+parseInt(iqomahWaktu)-1 > 59){
 									var IqomahMenitSebelum = ((parseInt(ImsakMenit))+(parseInt(iqomahWaktu))-1)%60;
@@ -1068,6 +1082,10 @@
 								if(parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu) > 59){
 									var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahDzuhurWaktu)))%60;
 									var IqomahJam = ((parseInt(ImsakJam))+1);
+
+									var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+									var IqomahJamKurang = parseInt(ImsakJam)+1;
+									var IqomahDetikKurang = 50;
 								}
 
 								if(parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1 < 0){
@@ -1171,6 +1189,10 @@
 								if(parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu) > 59){
 									var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahDzuhurWaktu)))%60;
 									var IqomahJam = ((parseInt(ImsakJam))+1);
+
+									var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+									var IqomahJamKurang = parseInt(ImsakJam)+1;
+									var IqomahDetikKurang = 50;
 								}
 
 								if(parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1 < 0){
@@ -1281,6 +1303,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahAsharWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1 < 0){
@@ -1358,6 +1384,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahAsharWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1 < 0){
@@ -1434,6 +1464,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahAsharWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahAsharWaktu)-1 < 0){
@@ -1520,6 +1554,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahMagribWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahMagribWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahMagribWaktu)-1 < 0){
@@ -1597,6 +1635,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahMagribWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahMagribWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahMagribWaktu)-1 < 0){
@@ -1673,6 +1715,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahMagribWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahMagribWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahMagribWaktu)-1 < 0){
@@ -1762,6 +1808,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahIshaWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1 < 0){
@@ -1882,6 +1932,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahIshaWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1 < 0){
@@ -2001,6 +2055,10 @@
 							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu) > 59){
 								var IqomahMenit = ((parseInt(ImsakMenit))+(parseInt(iqomahIshaWaktu)))%60;
 								var IqomahJam = ((parseInt(ImsakJam))+1);
+
+								var IqomahMenitKurang = (parseInt(ImsakMenit)+parseInt(iqomahDzuhurWaktu)-1)%60;
+								var IqomahJamKurang = parseInt(ImsakJam)+1;
+								var IqomahDetikKurang = 50;
 							}
 
 							if(parseInt(ImsakMenit)+parseInt(iqomahIshaWaktu)-1 < 0){
